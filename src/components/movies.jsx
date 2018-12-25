@@ -6,7 +6,6 @@ import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "./searchBox";
-import axios from "../components/common/axios-orders";
 
 class Movies extends Component {
   state = {
@@ -17,39 +16,21 @@ class Movies extends Component {
     sortColumn: { path: "title", order: "asc" }
   };
 
-  
-
   componentDidMount() {
-    database.ref('orders').on("value", (snapshot) => {
-      if (snapshot.val()!==null) {
+    database.ref("orders").on("value", snapshot => {
+      if (snapshot.val() !== null) {
         const datas = Object.values(snapshot.val());
-      console.log(snapshot.val())
-        this.setState({movies: datas});}
+        this.setState({ movies: datas });
+      }
     });
-
-
-
-
-    //const { data: orders } = await axios.get("/orders.json");
-    //եթե orders կա
-   // if (orders) {
-   //   const datas = Object.values(orders);
-   //   this.setState({ movies: datas });
-   // }
   }
 
-
   handleDelete = movie => {
-    let arr = [...this.state.movies];
-    let newarr = arr.filter(m => m.id !== movie);
-    console.log(newarr);
-    axios.delete("/orders.json");
-    newarr.forEach(function(item) {
-      axios.post("/orders.json", item);
-    });
-    this.setState({ movies: newarr });
-
-    console.log(movie);
+    database
+      .ref()
+      .child("orders")
+      .child(movie)
+      .remove();
   };
 
   handleUpdate = movie => {

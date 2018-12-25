@@ -43,7 +43,7 @@ class Form extends Component {
     );
   }
 
-  renderInput(name, label, type = "text") {
+  renderInput(name, label, type = "text", autoFocus) {
     const { data} = this.state;
 
     return (
@@ -53,6 +53,7 @@ class Form extends Component {
         value={data[name]}
         label={label}
         onChange={this.handleChange}
+        autoFocus={autoFocus}
       />
     );
   }

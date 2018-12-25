@@ -7,7 +7,7 @@ class MoviesTable extends Component {
     {
       path: "title",
       label: "Հայտարարության համար",
-      content: movie => <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+      content: movie => <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
     },
     { path: "genre", label: "Անվանում" },
     { path: "numberInStock", label: "Ծավալ" },
@@ -15,7 +15,7 @@ class MoviesTable extends Component {
     {
       key: "update",
       content: movie => (
-        <Link to={`/movies/${movie._id}`}>
+        <Link to={`/movies/${movie.id}`}>
           <button
             onClick={() => this.props.onUpdate(movie)}
             className="btn btn-primary btn-sm"
