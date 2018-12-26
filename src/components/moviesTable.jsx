@@ -18,7 +18,6 @@ class MoviesTable extends Component {
       content: movie => (
         <Link to={`/movies/${movie.id}`}>
           <button
-            onClick={() => this.props.onUpdate(movie)}
             className="btn btn-primary btn-sm"
           >
             Update

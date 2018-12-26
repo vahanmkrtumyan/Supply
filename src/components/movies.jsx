@@ -34,10 +34,6 @@ class Movies extends Component {
       .remove();
   };
 
-  handleUpdate = movie => {
-    console.log(movie);
-  };
-
   handlePageChange = page => {
     this.setState({ currentPage: page });
   };
@@ -75,35 +71,18 @@ class Movies extends Component {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
 
-    let table;
-    if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com") {
-      table= <MoviesTable
-      movies={movies}
-      sortColumn={sortColumn}
-      onDelete={this.handleDelete}
-      onUpdate={this.handleUpdate}
-      onSort={this.handleSort}
-    />;
-    } else {
-      table= <MoviesTableUser
-      movies={movies}
-      sortColumn={sortColumn}
-      onSort={this.handleSort}
-    />;
-    }
-
 
     if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
       return (
         <div>
-          <p>Տվյալ պահին հայտարարություններ չկան։</p>,
+          <p>Տվյալ պահին հայտարարություններ չկան։</p>
         </div>
       );
 
     if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com")
       return (
         <div>
-          <p>Տվյալ պահին հայտարարություններ չկան։</p>,
+          <p>Տվյալ պահին հայտարարություններ չկան։</p>
           <Link
             to="/movies/new"
             className="btn btn-primary"
@@ -129,13 +108,13 @@ class Movies extends Component {
             </Link>
             <p>Ընդամենը {totalCount} հայտարարություն։</p>
             <SearchBox value={searchQuery} onChange={this.handleSearch} />
-            <MoviesTable
+            {<MoviesTable
               movies={movies}
               sortColumn={sortColumn}
               onDelete={this.handleDelete}
               onUpdate={this.handleUpdate}
               onSort={this.handleSort}
-            />
+            />}
             <Pagination
               itemsCount={totalCount}
               pageSize={pageSize}
@@ -152,7 +131,7 @@ class Movies extends Component {
         <div className="col">
           <p>Ընդամենը {totalCount} հայտարարություն։</p>
           <SearchBox value={searchQuery} onChange={this.handleSearch} />
-          <MoviesTable
+          <MoviesTableUser
             movies={movies}
             sortColumn={sortColumn}
             onDelete={this.handleDelete}
