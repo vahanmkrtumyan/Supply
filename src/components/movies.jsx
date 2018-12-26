@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { database } from "./firebase";
 import { Link } from "react-router-dom";
 import MoviesTable from "./moviesTable";
+import MoviesTableUser from "./moviesTableUser";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
@@ -13,7 +14,7 @@ class Movies extends Component {
     currentPage: 1,
     pageSize: 10,
     searchQuery: "",
-    sortColumn: { path: "title", order: "asc" }
+    sortColumn: { path: "id", order: "asc" }
   };
 
   componentDidMount() {
@@ -72,8 +73,34 @@ class Movies extends Component {
   render() {
     const { length: count } = this.state.movies;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
+    const { user } = this.props;
 
-    if (count === 0)
+    let table;
+    if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com") {
+      table= <MoviesTable
+      movies={movies}
+      sortColumn={sortColumn}
+      onDelete={this.handleDelete}
+      onUpdate={this.handleUpdate}
+      onSort={this.handleSort}
+    />;
+    } else {
+      table= <MoviesTableUser
+      movies={movies}
+      sortColumn={sortColumn}
+      onSort={this.handleSort}
+    />;
+    }
+
+
+    if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
+      return (
+        <div>
+          <p>Տվյալ պահին հայտարարություններ չկան։</p>,
+        </div>
+      );
+
+    if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com")
       return (
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>,
@@ -86,20 +113,43 @@ class Movies extends Component {
           </Link>
         </div>
       );
-
     const { totalCount, data: movies } = this.getPagedData();
+
+    if (user && user.email === "vahanmkrtumyan@gmail.com")
+      return (
+        <div className="row">
+          <div className="col-3" />
+          <div className="col">
+            <Link
+              to="/movies/new"
+              className="btn btn-primary"
+              style={{ marginBottom: 20 }}
+            >
+              Նոր հայտ
+            </Link>
+            <p>Ընդամենը {totalCount} հայտարարություն։</p>
+            <SearchBox value={searchQuery} onChange={this.handleSearch} />
+            <MoviesTable
+              movies={movies}
+              sortColumn={sortColumn}
+              onDelete={this.handleDelete}
+              onUpdate={this.handleUpdate}
+              onSort={this.handleSort}
+            />
+            <Pagination
+              itemsCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
+            />
+          </div>
+        </div>
+      );
 
     return (
       <div className="row">
         <div className="col-3" />
         <div className="col">
-          <Link
-            to="/movies/new"
-            className="btn btn-primary"
-            style={{ marginBottom: 20 }}
-          >
-            Նոր հայտ
-          </Link>
           <p>Ընդամենը {totalCount} հայտարարություն։</p>
           <SearchBox value={searchQuery} onChange={this.handleSearch} />
           <MoviesTable

@@ -10,7 +10,6 @@ class Navbar extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(currentUser => {
       this.setState({ currentUser });
-      console.log(this.state.currentUser.email);
     });
   }
 

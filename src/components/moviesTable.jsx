@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Table from "./common/table";
 
 class MoviesTable extends Component {
+  
   columns = [
     {
       path: "title",
@@ -25,7 +26,7 @@ class MoviesTable extends Component {
         </Link>
       )
     },
-    {
+     {
       key: "delete",
       content: movie => (
         <button

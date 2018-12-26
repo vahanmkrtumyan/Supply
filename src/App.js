@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
+import { auth } from "../src/components/firebase";
 import {ToastContainer} from 'react-toastify';
 import Movies from "./components/movies";
 import MovieForm from "./components/movieForm";
@@ -11,6 +12,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 
 class App extends Component {
+
+  state = { currentUser: null };
+
+  async componentDidMount() {
+    await auth.onAuthStateChanged(currentUser => {
+       this.setState({ currentUser });
+
+    });
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -21,7 +32,7 @@ class App extends Component {
             <Route path="/register" component={RegisterForm} />
             <Route path="/login" component={LoginForm} />
             <Route path="/movies/:id" component={MovieForm} />
-            <Route path="/movies" component={Movies} />
+            <Route path="/movies" render={props=> <Movies {...props} user={this.state.currentUser}/>} />
             <Route path="/not-found" component={NotFound} />
             <Redirect from="/" exact to="/movies" />
             <Redirect to="/not-found" />
