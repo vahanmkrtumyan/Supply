@@ -79,15 +79,15 @@ class Orders extends Component {
       loading={this.state.loading} 
       size={200}
     /></div>)
-    if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
+    /*if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
       return (
         
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
         </div>
-      );
+      ); */
 
-    if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com")
+    if (count === 0 /*&& user && user.email === "vahanmkrtumyan@gmail.com"*/)
       return (
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
@@ -102,7 +102,7 @@ class Orders extends Component {
       );
     const { totalCount, data: orders } = this.getPagedData();
 
-    if (user && user.email === "vahanmkrtumyan@gmail.com")
+    //if (user && user.email === "vahanmkrtumyan@gmail.com")
       return (
         <div className="row">
           <div className="col-3" />
