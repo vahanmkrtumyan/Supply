@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { auth } from "../src/components/firebase";
 import {ToastContainer} from 'react-toastify';
-import Movies from "./components/movies";
+import Orders from "./components/orders";
 import OrderForm from "./components/orderForm";
 import NotFound from "./components/notFound";
 import NavBar from "./components/navBar";
@@ -27,10 +27,10 @@ class App extends Component {
         <NavBar />
         <main className="container">
           <Switch>
-            <Route path="/movies/:id" component={OrderForm} />
-            <Route path="/movies" render={props=> <Movies {...props} user={this.state.currentUser}/>} />
+            <Route path="/orders/:id" component={OrderForm} />
+            <Route path="/orders" render={props=> <Orders {...props} user={this.state.currentUser}/>} />
             <Route path="/not-found" component={NotFound} />
-            <Redirect from="/" exact to="/movies" />
+            <Redirect from="/" exact to="/orders" />
             <Redirect to="/not-found" />
           </Switch>
         </main>

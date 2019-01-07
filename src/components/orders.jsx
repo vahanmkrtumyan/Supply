@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { database } from "./firebase";
 import { Link } from "react-router-dom";
-import MoviesTable from "./moviesTable";
-import MoviesTableUser from "./moviesTableUser";
+import OrdersTable from "./ordersTable";
+import OrdersTableUser from "./ordersTableUser";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
@@ -10,9 +10,9 @@ import SearchBox from "./searchBox";
 import { RingLoader } from 'react-spinners';
 import "./Spinner.css";
 
-class Movies extends Component {
+class Orders extends Component {
   state = {
-    movies: [],
+    orders: [],
     currentPage: 1,
     pageSize: 10,
     searchQuery: "",
@@ -24,16 +24,16 @@ class Movies extends Component {
     database.ref("orders").on("value", snapshot => {
       if (snapshot.val() !== null) {
         const datas = Object.values(snapshot.val());
-        this.setState({ movies: datas, loading: false });
+        this.setState({ orders: datas, loading: false });
       }
     });
   }
 
-  handleDelete = movie => {
+  handleDelete = order => {
     database
       .ref()
       .child("orders")
-      .child(movie)
+      .child(order)
       .remove();
   };
 
@@ -55,22 +55,22 @@ class Movies extends Component {
       currentPage,
       sortColumn,
       searchQuery,
-      movies: allMovies
+      orders: allOrders
     } = this.state;
 
-    let filtered = allMovies.filter(m =>
+    let filtered = allOrders.filter(m =>
       m.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
-    const movies = paginate(sorted, currentPage, pageSize);
+    const orders = paginate(sorted, currentPage, pageSize);
 
-    return { totalCount: filtered.length, data: movies };
+    return { totalCount: filtered.length, data: orders };
   };
 
   render() {
-    const { length: count } = this.state.movies;
+    const { length: count } = this.state.orders;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
 
@@ -92,7 +92,7 @@ class Movies extends Component {
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
           <Link
-            to="/movies/new"
+            to="/orders/new"
             className="btn btn-primary"
             style={{ marginBottom: 20 }}
           >
@@ -100,7 +100,7 @@ class Movies extends Component {
           </Link>
         </div>
       );
-    const { totalCount, data: movies } = this.getPagedData();
+    const { totalCount, data: orders } = this.getPagedData();
 
     if (user && user.email === "vahanmkrtumyan@gmail.com")
       return (
@@ -108,7 +108,7 @@ class Movies extends Component {
           <div className="col-3" />
           <div className="col">
             <Link
-              to="/movies/new"
+              to="/orders/new"
               className="btn btn-primary"
               style={{ marginBottom: 20 }}
             >
@@ -116,8 +116,8 @@ class Movies extends Component {
             </Link>
             <p>Ընդամենը {totalCount} հայտարարություն։</p>
             <SearchBox value={searchQuery} onChange={this.handleSearch} />
-            {<MoviesTable
-              movies={movies}
+            {<OrdersTable
+              orders={orders}
               sortColumn={sortColumn}
               onDelete={this.handleDelete}
               onUpdate={this.handleUpdate}
@@ -139,8 +139,8 @@ class Movies extends Component {
         <div className="col">
           <p>Ընդամենը {totalCount} հայտարարություն։</p>
           <SearchBox value={searchQuery} onChange={this.handleSearch} />
-          <MoviesTableUser
-            movies={movies}
+          <OrdersTableUser
+            orders={orders}
             sortColumn={sortColumn}
             onDelete={this.handleDelete}
             onUpdate={this.handleUpdate}
@@ -158,4 +158,4 @@ class Movies extends Component {
   }
 }
 
-export default Movies;
+export default Orders;

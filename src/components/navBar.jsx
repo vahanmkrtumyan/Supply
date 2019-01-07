@@ -31,7 +31,7 @@ class Navbar extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <NavLink className="nav-item nav-link" to="/movies">
+            <NavLink className="nav-item nav-link" to="/orders">
               Հայտարարություններ
             </NavLink>
             {!this.state.loading && !currentUser && <SignIn />}

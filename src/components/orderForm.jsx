@@ -4,11 +4,11 @@ import Form from "./common/form";
 
 class OrderForm extends Form {
   state = {
-    movies: [],
+    orders: [],
     data: {
       id: "",
       title: "",
-      genre: "",
+      name: "",
       numberInStock: "",
       dailyRentalRate: "",
       comment: ""
@@ -20,28 +20,28 @@ class OrderForm extends Form {
       if (snapshot.val() !== null) {
         const datas = Object.values(snapshot.val());
 
-        this.setState({ movies: datas }, () => {
-          const getMovie = id => {
-            return this.state.movies.filter(m => m.id === id);
+        this.setState({ orders: datas }, () => {
+          const getOrder = id => {
+            return this.state.orders.filter(m => m.id === id);
           };
-          const movieId = this.props.match.params.id;
-          if (movieId === "new") return;
-          const movie = getMovie(movieId);
-          if (!movie) return this.props.history.replace("/not-found");
-          this.setState({ data: this.mapToViewModel(movie[0]) });
+          const OrderId = this.props.match.params.id;
+          if (OrderId === "new") return;
+          const order = getOrder(OrderId);
+          if (!order) return this.props.history.replace("/not-found");
+          this.setState({ data: this.mapToViewModel(order[0]) });
         });
       }
     });
   }
 
-  mapToViewModel(movie) {
+  mapToViewModel(order) {
     return {
-      id: movie.id,
-      title: movie.title,
-      genre: movie.genre,
-      numberInStock: movie.numberInStock,
-      dailyRentalRate: movie.dailyRentalRate,
-      comment: movie.comment
+      id: order.id,
+      title: order.title,
+      name: order.name,
+      numberInStock: order.numberInStock,
+      dailyRentalRate: order.dailyRentalRate,
+      comment: order.comment
     };
   }
 
@@ -50,7 +50,7 @@ class OrderForm extends Form {
     const data = {
       id: this.state.data.title,
       title: this.state.data.title,
-      genre: this.state.data.genre,
+      name: this.state.data.name,
       numberInStock: this.state.data.numberInStock,
       dailyRentalRate: this.state.data.dailyRentalRate,
       comment: this.state.data.comment
@@ -61,9 +61,8 @@ class OrderForm extends Form {
       .child(this.state.data.title)
       .set(data);
 
-    //axios.post("/orders.json", data);
 
-    this.props.history.push("/movies");
+    this.props.history.push("/orders");
   };
 
   render() {
@@ -72,7 +71,7 @@ class OrderForm extends Form {
         <h2>Նոր հայտարարություն</h2>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Հայտարարության համար", "", "1")}
-          {this.renderInput("genre", "Ապրանք")}
+          {this.renderInput("name", "Ապրանք")}
           {this.renderInput("numberInStock", "Ծավալ", "number")}
           {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}
           {this.renderInput("comment", "Մեկնաբանություն")}

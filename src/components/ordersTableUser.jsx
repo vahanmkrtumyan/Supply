@@ -1,24 +1,24 @@
 import React, { Component } from "react";
 import Table from "./common/table";
 
-class MoviesTableUser extends Component {
+class OrdersTableUser extends Component {
   
   columns = [
     {
       path: "title",
       label: "Հայտարարության համար" },
-    { path: "genre", label: "Անվանում" },
+    { path: "name", label: "Անվանում" },
     { path: "numberInStock", label: "Ծավալ" },
     { path: "dailyRentalRate", label: "Վերջնաժամկետ" },
   ];
 
   render() {
-    const { movies, onSort, sortColumn } = this.props;
+    const { orders, onSort, sortColumn } = this.props;
 
     return (
       <Table
         columns={this.columns}
-        data={movies}
+        data={orders}
         sortColumn={sortColumn}
         onSort={onSort}
       />
@@ -26,4 +26,4 @@ class MoviesTableUser extends Component {
   }
 }
 
-export default MoviesTableUser;
+export default OrdersTableUser;
