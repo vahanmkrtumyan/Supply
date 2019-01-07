@@ -1,26 +1,23 @@
 import React, { Component } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { auth } from "./firebase";
 import CurrentUser from "./currentUser";
 import SignIn from "./signin";
 
 class Navbar extends Component {
-  state = { currentUser: null };
+  state = { currentUser: null, loading: true };
 
   componentDidMount() {
     auth.onAuthStateChanged(currentUser => {
-      this.setState({ currentUser });
+      this.setState({ currentUser, loading: false });
     });
   }
 
   render() {
     const { currentUser } = this.state;
-    console.log(currentUser)
+    console.log(currentUser);
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link className="navbar-brand sm" to="/">
-          Տաշիր պորտալ
-        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -35,15 +32,10 @@ class Navbar extends Component {
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
             <NavLink className="nav-item nav-link" to="/movies">
-              Movies
+              Հայտարարություններ
             </NavLink>
-            <NavLink className="nav-item nav-link" to="/login">
-              Login
-            </NavLink>
-            <NavLink className="nav-item nav-link" to="/register">
-              Register
-            </NavLink>
-            {!currentUser && <SignIn />}
+            {!this.state.loading && !currentUser && <SignIn />}
+
             {currentUser && <CurrentUser user={currentUser} />}
           </div>
         </div>

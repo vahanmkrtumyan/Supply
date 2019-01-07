@@ -2,7 +2,7 @@ import React from "react";
 import { database } from "./firebase";
 import Form from "./common/form";
 
-class MovieForm extends Form {
+class OrderForm extends Form {
   state = {
     movies: [],
     data: {
@@ -83,4 +83,4 @@ class MovieForm extends Form {
   }
 }
 
-export default MovieForm;
+export default OrderForm;

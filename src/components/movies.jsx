@@ -7,6 +7,8 @@ import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "./searchBox";
+import { RingLoader } from 'react-spinners';
+import "./Spinner.css";
 
 class Movies extends Component {
   state = {
@@ -14,14 +16,15 @@ class Movies extends Component {
     currentPage: 1,
     pageSize: 10,
     searchQuery: "",
-    sortColumn: { path: "id", order: "asc" }
+    sortColumn: { path: "id", order: "asc" },
+    loading: true
   };
 
   componentDidMount() {
     database.ref("orders").on("value", snapshot => {
       if (snapshot.val() !== null) {
         const datas = Object.values(snapshot.val());
-        this.setState({ movies: datas });
+        this.setState({ movies: datas, loading: false });
       }
     });
   }
@@ -71,9 +74,14 @@ class Movies extends Component {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
 
-
+    if (this.state.loading) return (<div className="Spinner"><RingLoader
+      color={'#123abc'} 
+      loading={this.state.loading} 
+      size={200}
+    /></div>)
     if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
       return (
+        
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
         </div>
