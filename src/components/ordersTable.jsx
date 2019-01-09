@@ -13,6 +13,7 @@ class OrdersTable extends Component {
     { path: "name", label: "Անվանում" },
     { path: "numberInStock", label: "Ծավալ" },
     { path: "dailyRentalRate", label: "Վերջնաժամկետ" },
+    { path: "contact", label: "Կոնտակտ" },
     {
       key: "update",
       content: order => (

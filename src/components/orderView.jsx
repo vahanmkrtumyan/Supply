@@ -3,11 +3,11 @@ import { database } from "./firebase";
 import Joi from "joi-browser";
 import Form from "./common/form";
 
-class OrderForm extends Form {
+class OrderView extends Form {
   state = {
     orders: [],
     data: {
-      id: "1",
+      id: "",
       title: "",
       name: "",
       numberInStock: "",
@@ -15,17 +15,13 @@ class OrderForm extends Form {
       contact: "",
       comment: ""
     },
-    contacts: [
-      { id: "Իգոր: 09345639", name: "Իգոր" },
-      { id: "Արարատ: 099910301", name: "Արարատ" },
-      { id: "Վահե։ 077450210", name: "Վահե" }
-    ],
+    
     errors: {}
   };
 
 
   schema = {
-    id: Joi.string(),
+    id: Joi.number(),
     title: Joi.number()
     .required()
       .label("Հայատարարության համար"),
@@ -98,24 +94,16 @@ class OrderForm extends Form {
   };
 
   render() {
-    console.log(this.validate())
     return (
       <div>
         <h2>Նոր հայտարարություն</h2>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("title", "Հայտարարության համար", "", "1")}
-          {this.renderInput("name", "Ապրանք")}
-          {this.renderInput("numberInStock", "Ծավալ", "number")}
-          {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}
-          {this.renderSelect("contact", "Կոնտակտ", this.state.contacts)}
-          {this.renderInput("comment", "Մեկնաբանություն")}
-          <button className="btn btn-primary" disabled={this.validate()}>
-        Save
-      </button>
+          {this.renderInput("price", "Առաջարկվող գին", "", "1")}
+          
         </form>
       </div>
     );
   }
 }
 
-export default OrderForm;
+export default OrderView;

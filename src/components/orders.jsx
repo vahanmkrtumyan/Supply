@@ -7,7 +7,7 @@ import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "./searchBox";
-import { RingLoader } from 'react-spinners';
+import { ClipLoader } from "react-spinners";
 import "./Spinner.css";
 
 class Orders extends Component {
@@ -59,7 +59,7 @@ class Orders extends Component {
     } = this.state;
 
     let filtered = allOrders.filter(m =>
-      m.title.toLowerCase().includes(searchQuery.toLowerCase())
+      m.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
@@ -74,11 +74,16 @@ class Orders extends Component {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
 
-    if (this.state.loading) return (<div className="Spinner"><RingLoader
-      color={'#123abc'} 
-      loading={this.state.loading} 
-      size={200}
-    /></div>)
+    if (this.state.loading)
+      return (
+        <div className="Spinner">
+          <ClipLoader
+            color={"#123abc"}
+            loading={this.state.loading}
+            size={200}
+          />
+        </div>
+      );
     /*if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
       return (
         
@@ -103,37 +108,39 @@ class Orders extends Component {
     const { totalCount, data: orders } = this.getPagedData();
 
     //if (user && user.email === "vahanmkrtumyan@gmail.com")
-      return (
-        <div className="row">
-          <div className="col-3" />
-          <div className="col">
-            <Link
-              to="/orders/new"
-              className="btn btn-primary"
-              style={{ marginBottom: 20 }}
-            >
-              Նոր հայտ
-            </Link>
-            <p>Ընդամենը {totalCount} հայտարարություն։</p>
-            <SearchBox value={searchQuery} onChange={this.handleSearch} />
-            {<OrdersTable
+    return (
+      <div className="row">
+        <div className="col-3" />
+        <div className="col">
+          <Link
+            to="/orders/new"
+            className="btn btn-primary"
+            style={{ marginBottom: 20 }}
+          >
+            Նոր հայտ
+          </Link>
+          <p>Ընդամենը {totalCount} հայտարարություն։</p>
+          <SearchBox value={searchQuery} onChange={this.handleSearch} />
+          {
+            <OrdersTable
               orders={orders}
               sortColumn={sortColumn}
               onDelete={this.handleDelete}
               onUpdate={this.handleUpdate}
               onSort={this.handleSort}
-            />}
-            <Pagination
-              itemsCount={totalCount}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={this.handlePageChange}
             />
-          </div>
+          }
+          <Pagination
+            itemsCount={totalCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={this.handlePageChange}
+          />
         </div>
-      );
+      </div>
+    );
 
-    return (
+    /*return (
       <div className="row">
         <div className="col-3" />
         <div className="col">
@@ -154,7 +161,7 @@ class Orders extends Component {
           />
         </div>
       </div>
-    );
+    );*/
   }
 }
 
