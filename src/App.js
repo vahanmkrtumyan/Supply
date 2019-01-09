@@ -6,6 +6,7 @@ import Orders from "./components/orders";
 import OrderForm from "./components/orderForm";
 import NotFound from "./components/notFound";
 import NavBar from "./components/navBar";
+import Footer from "./components/footer";
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 
@@ -34,6 +35,7 @@ class App extends Component {
             <Redirect to="/not-found" />
           </Switch>
         </main>
+        <Footer/>
       </React.Fragment>
     );
   }
