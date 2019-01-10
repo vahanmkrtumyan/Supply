@@ -98,7 +98,7 @@ class Orders extends Component {
       );
     /*if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
       return (
-        
+
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
         </div>
@@ -122,7 +122,6 @@ class Orders extends Component {
     //if (user && user.email === "vahanmkrtumyan@gmail.com")
     return (
       <div className="row">
-        <div className="col-3" />
         <div className="col">
           <Link
             to="/orders/new"
