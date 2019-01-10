@@ -9,6 +9,7 @@ import NavBar from "./components/navBar";
 import Footer from "./components/footer";
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
+import OrderView from './components/orderView';
 
 class App extends Component {
 
@@ -29,6 +30,7 @@ class App extends Component {
         <main className="container">
           <Switch>
             <Route path="/orders/:id" component={OrderForm} />
+            <Route path="/orderView/:id" component={OrderView} />
             <Route path="/orders" render={props=> <Orders {...props} user={this.state.currentUser}/>} />
             <Route path="/not-found" component={NotFound} />
             <Redirect from="/" exact to="/orders" />

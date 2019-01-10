@@ -1,9 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 import { database } from "./firebase";
-import Joi from "joi-browser";
-import Form from "./common/form";
 
-class OrderView extends Form {
+class OrderView extends Component {
   state = {
     orders: [],
     data: {
@@ -15,31 +13,8 @@ class OrderView extends Form {
       contact: "",
       comment: ""
     },
-    
+
     errors: {}
-  };
-
-
-  schema = {
-    id: Joi.number(),
-    title: Joi.number()
-    .required()
-      .label("Հայատարարության համար"),
-    name: Joi.string()
-      .required()
-      .label("Ապրանք"),
-    numberInStock: Joi.string()
-    .required()
-    .label("Ծավալ"),
-    dailyRentalRate: Joi.date()
-      .required()
-      .label("Վերջնաժամկետ"),
-      contact: Joi.string()
-    .required()
-    .label("Կոնտակտ"),
-    comment: Joi.string()
-    .required()
-    .label("Մեկնաբանություն"),
   };
 
   componentDidMount() {
@@ -52,9 +27,7 @@ class OrderView extends Form {
             return this.state.orders.filter(m => m.id === id);
           };
           const OrderId = this.props.match.params.id;
-          if (OrderId === "new") return;
           const order = getOrder(OrderId);
-          if (!order) return this.props.history.replace("/not-found");
           this.setState({ data: this.mapToViewModel(order[0]) });
         });
       }
@@ -73,34 +46,15 @@ class OrderView extends Form {
     };
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const data = {
-      id: this.state.data.title,
-      title: this.state.data.title,
-      name: this.state.data.name,
-      numberInStock: this.state.data.numberInStock,
-      dailyRentalRate: this.state.data.dailyRentalRate,
-      contact: this.state.data.contact,
-      comment: this.state.data.comment
-    };
-    database
-      .ref()
-      .child("orders")
-      .child(this.state.data.title)
-      .set(data);
-
+  handleSubmit = () => {
     this.props.history.push("/orders");
   };
 
   render() {
     return (
       <div>
-        <h2>Նոր հայտարարություն</h2>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("price", "Առաջարկվող գին", "", "1")}
-          
-        </form>
+        <h2>{this.state.data.id}</h2>
+        <button className='btn btn-primary btn-sm' onClick={this.handleSubmit}>Վերադառնալ</button>
       </div>
     );
   }

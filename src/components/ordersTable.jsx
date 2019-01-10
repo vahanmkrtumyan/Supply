@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import Table from "./common/table";
 
 class OrdersTable extends Component {
-  
   columns = [
     {
       path: "title",
       label: "Հայտարարության համար",
-      content: order => <Link to={`/orders/${order.id}`}>{order.title}</Link>
+      content: order => <Link to={`/orderView/${order.id}`}>{order.title}</Link>
     },
     { path: "name", label: "Անվանում" },
     { path: "numberInStock", label: "Ծավալ" },
@@ -18,15 +17,11 @@ class OrdersTable extends Component {
       key: "update",
       content: order => (
         <Link to={`/orders/${order.id}`}>
-          <button
-            className="btn btn-primary btn-sm"
-          >
-            Update
-          </button>
+          <button className="btn btn-primary btn-sm">Update</button>
         </Link>
       )
     },
-     {
+    {
       key: "delete",
       content: order => (
         <button
