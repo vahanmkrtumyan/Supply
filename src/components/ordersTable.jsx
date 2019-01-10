@@ -7,7 +7,7 @@ class OrdersTable extends Component {
     {
       path: "title",
       label: "Հայտարարության համար",
-      content: order => <Link to={`/orderView/${order.id}`}>{order.title}</Link>
+      content: order => <p onClick={()=>this.props.onOpen(order)}>{order.title}</p>
     },
     { path: "name", label: "Անվանում" },
     { path: "numberInStock", label: "Ծավալ" },

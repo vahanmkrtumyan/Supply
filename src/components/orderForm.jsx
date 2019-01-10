@@ -98,7 +98,6 @@ class OrderForm extends Form {
   };
 
   render() {
-    console.log(this.validate())
     return (
       <div>
         <h2>Նոր հայտարարություն</h2>

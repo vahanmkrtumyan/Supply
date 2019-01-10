@@ -5,6 +5,7 @@ import OrdersTable from "./ordersTable";
 import OrdersTableUser from "./ordersTableUser";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
+import OrderView from "../components/orderView";
 import _ from "lodash";
 import SearchBox from "./searchBox";
 import { ClipLoader } from "react-spinners";
@@ -17,7 +18,9 @@ class Orders extends Component {
     pageSize: 10,
     searchQuery: "",
     sortColumn: { path: "id", order: "asc" },
-    loading: true
+    loading: true,
+    show: false,
+    order: {}
   };
 
   componentDidMount() {
@@ -47,6 +50,14 @@ class Orders extends Component {
 
   handleSort = sortColumn => {
     this.setState({ sortColumn });
+  };
+
+  openModal = order => {
+    this.setState({order, show: true});
+  };
+
+  closeModal = () => {
+    this.setState({show: false});
   };
 
   getPagedData = () => {
@@ -128,6 +139,7 @@ class Orders extends Component {
               onDelete={this.handleDelete}
               onUpdate={this.handleUpdate}
               onSort={this.handleSort}
+              onOpen={this.openModal}
             />
           }
           <Pagination
@@ -137,6 +149,7 @@ class Orders extends Component {
             onPageChange={this.handlePageChange}
           />
         </div>
+        {this.state.show && <OrderView order={this.state.order} close={this.closeModal}/>}
       </div>
     );
 
