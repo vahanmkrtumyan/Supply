@@ -10,6 +10,7 @@ import _ from "lodash";
 import SearchBox from "./searchBox";
 import { ClipLoader } from "react-spinners";
 import "./Spinner.css";
+import "./UI/Modal/modal.css";
 
 class Orders extends Component {
   state = {

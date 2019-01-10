@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import classes from "../components/UI/Modal/modal.css"
+import "../components/UI/Modal/modal.css";
 
 class OrderView extends Component {
   handleSubmit = () => {
@@ -8,10 +8,10 @@ class OrderView extends Component {
 
   render() {
     const order = this.props.order;
-console.log(classes.Modal)
     return (
-      <div className={classes.Modal}>
+      <div className="Modal">
         <h2>{order.id}</h2>
+        <h2>{order.name}</h2>
         <button className="btn btn-primary btn-sm" onClick={this.props.close}>
           Վերադառնալ
         </button>
