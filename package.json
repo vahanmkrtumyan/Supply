@@ -10,7 +10,6 @@
     "joi": "^14.3.0",
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
-    "material-ui": "^0.20.2",
     "materialize-css": "^1.0.0-rc.2",
     "prop-types": "^15.6.2",
     "query-string": "^6.2.0",
@@ -38,5 +37,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
 }

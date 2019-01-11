@@ -98,7 +98,7 @@ class Orders extends Component {
       );
     /*if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
       return (
-        
+
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
         </div>
