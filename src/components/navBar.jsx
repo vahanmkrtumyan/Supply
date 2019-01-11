@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { auth } from "./firebase";
 import CurrentUser from "./currentUser";
 import SignIn from "./signin";
+import logo from "./UI/photos/logo.jpg"
 
 class Navbar extends Component {
   state = { currentUser: null, loading: true };
@@ -31,6 +32,10 @@ class Navbar extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
+          
+          <NavLink className="nav-item nav-link" to="/orders">
+          <img src={logo} alt="Logo" />
+            </NavLink>
             <NavLink className="nav-item nav-link" to="/orders">
               Հայտարարություններ
             </NavLink>

@@ -11,6 +11,7 @@ import SearchBox from "./searchBox";
 import { ClipLoader } from "react-spinners";
 import "./Spinner.css";
 import "./UI/Modal/modal.css";
+import Backdrop from "./UI/Backdrop/backdrop";
 
 class Orders extends Component {
   state = {
@@ -54,11 +55,11 @@ class Orders extends Component {
   };
 
   openModal = order => {
-    this.setState({order, show: true});
+    this.setState({ order, show: true });
   };
 
   closeModal = () => {
-    this.setState({show: false});
+    this.setState({ show: false });
   };
 
   getPagedData = () => {
@@ -83,8 +84,7 @@ class Orders extends Component {
 
   render() {
     const { length: count } = this.state.orders;
-    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
-    const { user } = this.props;
+    const { pageSize, currentPage, sortColumn, searchQuery, show } = this.state;
 
     if (this.state.loading)
       return (
@@ -122,7 +122,6 @@ class Orders extends Component {
     //if (user && user.email === "vahanmkrtumyan@gmail.com")
     return (
       <div className="row">
-        <div className="col-3" />
         <div className="col">
           <Link
             to="/orders/new"
@@ -133,16 +132,14 @@ class Orders extends Component {
           </Link>
           <p>Ընդամենը {totalCount} հայտարարություն։</p>
           <SearchBox value={searchQuery} onChange={this.handleSearch} />
-          {
-            <OrdersTable
-              orders={orders}
-              sortColumn={sortColumn}
-              onDelete={this.handleDelete}
-              onUpdate={this.handleUpdate}
-              onSort={this.handleSort}
-              onOpen={this.openModal}
-            />
-          }
+          <OrdersTable
+            orders={orders}
+            sortColumn={sortColumn}
+            onDelete={this.handleDelete}
+            onUpdate={this.handleUpdate}
+            onSort={this.handleSort}
+            onOpen={this.openModal}
+          />
           <Pagination
             itemsCount={totalCount}
             pageSize={pageSize}
@@ -150,7 +147,12 @@ class Orders extends Component {
             onPageChange={this.handlePageChange}
           />
         </div>
-        {this.state.show && <OrderView order={this.state.order} close={this.closeModal}/>}
+        <OrderView
+          order={this.state.order}
+          close={this.closeModal}
+          show={this.state.show}
+        />
+        <Backdrop show={show} close={this.closeModal}/>
       </div>
     );
 
