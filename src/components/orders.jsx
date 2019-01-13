@@ -124,8 +124,8 @@ class Orders extends Component {
       <div className="row box">
         <div className="col">
 
-          <p>Ընդամենը {totalCount} հայտարարություն։</p>
-            <div className="row flex pb-10">
+          <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
+            <div className="row flex pb-20">
                 <SearchBox value={searchQuery} onChange={this.handleSearch} />
                 <div className="col-sm-6 text-right">
                     <Link
@@ -146,7 +146,7 @@ class Orders extends Component {
               onUpdate={this.handleUpdate}
               onSort={this.handleSort}
               onOpen={this.openModal}
-            />=
+            />
           <Pagination
             itemsCount={totalCount}
             pageSize={pageSize}

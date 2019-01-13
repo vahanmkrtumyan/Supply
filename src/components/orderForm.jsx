@@ -99,7 +99,7 @@ class OrderForm extends Form {
 
   render() {
     return (
-      <div>
+      <div className="box form w-600">
         <h2>Նոր հայտարարություն</h2>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "ID", "", "1")}
