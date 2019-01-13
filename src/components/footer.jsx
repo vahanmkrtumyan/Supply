@@ -1,6 +1,4 @@
 import React from "react";
-import 'materialize-css/dist/css/materialize.min.css';
-import 'materialize-css';
 
 
 const Footer = () => {
@@ -30,5 +28,5 @@ const Footer = () => {
   </div>
 </footer> );
 }
- 
+
 export default Footer;

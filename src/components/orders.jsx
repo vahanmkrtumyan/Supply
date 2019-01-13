@@ -106,7 +106,7 @@ class Orders extends Component {
 
     if (count === 0 /*&& user && user.email === "vahanmkrtumyan@gmail.com"*/)
       return (
-        <div>
+        <div className="box">
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
           <Link
             to="/orders/new"
@@ -121,18 +121,24 @@ class Orders extends Component {
 
     //if (user && user.email === "vahanmkrtumyan@gmail.com")
     return (
-      <div className="row">
+      <div className="row box">
         <div className="col">
-          <Link
-            to="/orders/new"
-            className="btn btn-primary"
-            style={{ marginBottom: 20 }}
-          >
-            Նոր հայտ
-          </Link>
+
           <p>Ընդամենը {totalCount} հայտարարություն։</p>
-          <SearchBox value={searchQuery} onChange={this.handleSearch} />
-          {
+            <div className="row flex pb-10">
+                <SearchBox value={searchQuery} onChange={this.handleSearch} />
+                <div className="col-sm-6 text-right">
+                    <Link
+                        to="/orders/new"
+                        className="btn"
+                        style={{ marginBottom: 20 }}
+                    >
+                        Նոր հայտարարություն
+                    </Link>
+                </div>
+
+            </div>
+
             <OrdersTable
               orders={orders}
               sortColumn={sortColumn}
@@ -140,8 +146,7 @@ class Orders extends Component {
               onUpdate={this.handleUpdate}
               onSort={this.handleSort}
               onOpen={this.openModal}
-            />
-          }
+            />=
           <Pagination
             itemsCount={totalCount}
             pageSize={pageSize}
