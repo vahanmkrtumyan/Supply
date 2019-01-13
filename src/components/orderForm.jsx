@@ -102,7 +102,7 @@ class OrderForm extends Form {
       <div>
         <h2>Նոր հայտարարություն</h2>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("title", "Հայտարարության համար", "", "1")}
+          {this.renderInput("title", "ID", "", "1")}
           {this.renderInput("name", "Ապրանք")}
           {this.renderInput("numberInStock", "Ծավալ", "number")}
           {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}

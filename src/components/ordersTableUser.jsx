@@ -6,7 +6,7 @@ class OrdersTableUser extends Component {
   columns = [
     {
       path: "title",
-      label: "Հայտարարության համար" },
+      label: "ID" },
     { path: "name", label: "Անվանում" },
     { path: "numberInStock", label: "Ծավալ" },
     { path: "dailyRentalRate", label: "Վերջնաժամկետ" },

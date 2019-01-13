@@ -9,13 +9,14 @@ class OrderView extends Component {
   render() {
     const order = this.props.order;
     return (
+      this.props.show ? (
       <div className="Modal">
         <h2>{order.id}</h2>
         <h2>{order.name}</h2>
         <button className="btn btn-primary btn-sm" onClick={this.props.close}>
           Վերադառնալ
         </button>
-      </div>
+      </div>) : null
     );
   }
 }
