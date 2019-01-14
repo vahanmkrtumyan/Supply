@@ -8,16 +8,43 @@ class OrderView extends Component {
 
   render() {
     const order = this.props.order;
-    return (
-      this.props.show ? (
+    return this.props.show ? (
       <div className="Modal">
-        <h2>{order.id}</h2>
-        <h2>{order.name}</h2>
+        <table className="table table-hover">
+          <tbody>
+            <tr>
+              <td>Հայտարարության ID</td>
+              <td>{order.id}</td>
+            </tr>
+            <tr>
+              <td>Ապրանքի անվանում</td>
+              <td>{order.name}</td>
+            </tr>
+            <tr>
+              <td>Ապրանքի ծավալ</td>
+              <td>{order.numberInStock}</td>
+            </tr>
+            <tr>
+              <td>Մատակարարման վերջնաժամեկտ</td>
+              <td>{order.dailyRentalRate}</td>
+            </tr>
+            <tr>
+              <td>Կոնտակտ</td>
+              <td>{order.contact}</td>
+            </tr>
+            <tr>
+              <td>Մեկնաբանություն</td>
+              <td>{order.comment}</td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+
         <button className="btn btn-primary btn-sm" onClick={this.props.close}>
           Վերադառնալ
         </button>
-      </div>) : null
-    );
+      </div>
+    ) : null;
   }
 }
 
