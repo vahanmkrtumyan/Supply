@@ -17,7 +17,7 @@ class Orders extends Component {
   state = {
     orders: [],
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 6,
     searchQuery: "",
     sortColumn: { path: "id", order: "asc" },
     loading: true,
