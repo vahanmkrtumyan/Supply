@@ -1,7 +1,8 @@
 import React from "react";
-import { database } from "./firebase";
+import { storage, database } from "./firebase";
 import Joi from "joi-browser";
 import Form from "./common/form";
+import {} from "firebase";
 
 class OrderForm extends Form {
   state = {
@@ -23,27 +24,26 @@ class OrderForm extends Form {
     errors: {}
   };
 
-
   schema = {
     id: Joi.string(),
     title: Joi.number()
-    .required()
+      .required()
       .label("Հայատարարության համար"),
     name: Joi.string()
       .required()
       .label("Ապրանք"),
     numberInStock: Joi.string()
-    .required()
-    .label("Ծավալ"),
+      .required()
+      .label("Ծավալ"),
     dailyRentalRate: Joi.date()
       .required()
       .label("Վերջնաժամկետ"),
-      contact: Joi.string()
-    .required()
-    .label("Կոնտակտ"),
+    contact: Joi.string()
+      .required()
+      .label("Կոնտակտ"),
     comment: Joi.string()
-    .required()
-    .label("Մեկնաբանություն"),
+      .required()
+      .label("Մեկնաբանություն")
   };
 
   componentDidMount() {
@@ -97,6 +97,14 @@ class OrderForm extends Form {
     this.props.history.push("/orders");
   };
 
+  handleSelect = e => {
+    const file = e.target.files[0];
+    this.storageRef = storage.ref("/products").child(this.state.data.id);
+    const uploadTask = this.storageRef
+      .child(file.name)
+      .put(file, { contentType: file.type });
+  };
+
   render() {
     return (
       <div className="box form w-600">
@@ -108,9 +116,16 @@ class OrderForm extends Form {
           {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}
           {this.renderSelect("contact", "Կոնտակտ", this.state.contacts)}
           {this.renderInput("comment", "Մեկնաբանություն")}
+          <input
+            type="file"
+            name='dsfsd'
+            onChange={this.handleSelect}
+          />
+          <br />
+          <br />
           <button className="btn btn-primary" disabled={this.validate()}>
-        Save
-      </button>
+            Save
+          </button>
         </form>
       </div>
     );
