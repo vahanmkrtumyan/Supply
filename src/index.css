@@ -99,6 +99,7 @@ body {
 
 #root {
   height: 100%;
+  background-image: linear-gradient(to right top, #dedede, #e8e8e8, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff);
 }
 
 main.container {
@@ -112,7 +113,9 @@ main.container {
 
 .box {
     padding: 30px;
-    box-shadow: 2px 2px 10px 0px rgba(0,0,0, 0.15);
+    box-shadow: 4px 4px 10px 0px rgba(0,0,0, 0.1);
+    background-color: #fff;
+    border: 1px solid #f2f2f2;
 }
 .box.w-600 {
     max-width: 600px;
