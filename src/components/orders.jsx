@@ -40,6 +40,7 @@ class Orders extends Component {
       .child("orders")
       .child(order)
       .remove();
+  //    database.ref().child(uid).child(img).remove()
   };
 
   handlePageChange = page => {

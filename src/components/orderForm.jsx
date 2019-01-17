@@ -15,6 +15,7 @@ class OrderForm extends Form {
       contact: "",
       imageURL: "0",
       comment: ""
+      //    fileName: "",
     },
     contacts: [
       { id: "Իգոր: 09345639", name: "Իգոր" },
@@ -41,10 +42,10 @@ class OrderForm extends Form {
     contact: Joi.string()
       .required()
       .label("Կոնտակտ"),
+    imageURL: Joi.string().label("Նկար"),
     comment: Joi.string()
       .required()
-      .label("Մեկնաբանություն"),
-    imag: Joi.string().label("nkar")
+      .label("Մեկնաբանություն")
   };
 
   componentDidMount() {
@@ -76,6 +77,7 @@ class OrderForm extends Form {
       contact: order.contact,
       comment: order.comment,
       imageURL: order.imageURL || "0"
+      //  fileName: ider.fileName || "0"
     };
   }
 
@@ -89,7 +91,8 @@ class OrderForm extends Form {
       dailyRentalRate: this.state.data.dailyRentalRate,
       contact: this.state.data.contact,
       comment: this.state.data.comment,
-      imageURL: this.state.data.imageURL
+      imageURL: this.state.data.imageURL,
+      fileName: this.state.data.fileName || "0"
     };
     database
       .ref()
@@ -110,6 +113,9 @@ class OrderForm extends Form {
     var uploadTask = storageRef
       .child("images/" + file.name)
       .put(file, metadata);
+    const data = this.state.data;
+    data.fileName = file.name;
+    //         this.setState({filename})
 
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(
