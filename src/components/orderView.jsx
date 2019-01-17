@@ -38,6 +38,7 @@ class OrderView extends Component {
             </tr>
           </tbody>
         </table>
+        <img src={order.imageURL} />
         <br />
 
         <button className="btn btn-primary btn-sm" onClick={this.props.close}>

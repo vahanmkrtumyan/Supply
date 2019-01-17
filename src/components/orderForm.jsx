@@ -2,7 +2,6 @@ import React from "react";
 import { storage, database } from "./firebase";
 import Joi from "joi-browser";
 import Form from "./common/form";
-import {} from "firebase";
 
 class OrderForm extends Form {
   state = {
@@ -14,6 +13,7 @@ class OrderForm extends Form {
       numberInStock: "",
       dailyRentalRate: "",
       contact: "",
+      imageURL: "0",
       comment: ""
     },
     contacts: [
@@ -43,7 +43,8 @@ class OrderForm extends Form {
       .label("Կոնտակտ"),
     comment: Joi.string()
       .required()
-      .label("Մեկնաբանություն")
+      .label("Մեկնաբանություն"),
+    imag: Joi.string().label("nkar")
   };
 
   componentDidMount() {
@@ -73,7 +74,8 @@ class OrderForm extends Form {
       numberInStock: order.numberInStock,
       dailyRentalRate: order.dailyRentalRate,
       contact: order.contact,
-      comment: order.comment
+      comment: order.comment,
+      imageURL: order.imageURL || "0"
     };
   }
 
@@ -86,7 +88,8 @@ class OrderForm extends Form {
       numberInStock: this.state.data.numberInStock,
       dailyRentalRate: this.state.data.dailyRentalRate,
       contact: this.state.data.contact,
-      comment: this.state.data.comment
+      comment: this.state.data.comment,
+      imageURL: this.state.data.imageURL
     };
     database
       .ref()
@@ -99,10 +102,55 @@ class OrderForm extends Form {
 
   handleSelect = e => {
     const file = e.target.files[0];
-    this.storageRef = storage.ref("/products").child(this.state.data.id);
-    const uploadTask = this.storageRef
-      .child(file.name)
-      .put(file, { contentType: file.type });
+
+    var metadata = {
+      conetentType: "image/jpeg"
+    };
+    var storageRef = storage.ref();
+    var uploadTask = storageRef
+      .child("images/" + file.name)
+      .put(file, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed", // or 'state_changed'
+      snapshot => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused": // or 'paused'
+            console.log("Upload is paused");
+            break;
+          case "running": // or 'running'
+            console.log("Upload is running");
+            break;
+        }
+      },
+      error => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            break;
+
+          case "storage/unknown":
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          console.log(downloadURL);
+          const data = this.state.data;
+          data.imageURL = downloadURL;
+
+          this.setState({ data }, () => console.log(this.state.data.imageURL));
+        });
+      }
+    );
   };
 
   render() {
@@ -118,14 +166,12 @@ class OrderForm extends Form {
           {this.renderInput("comment", "Մեկնաբանություն")}
           <input
             type="file"
-            name='dsfsd'
+            name={this.state.data.name}
             onChange={this.handleSelect}
           />
           <br />
           <br />
-          <button className="btn btn-primary" disabled={this.validate()}>
-            Save
-          </button>
+          <button className="btn btn-primary">Save</button>
         </form>
       </div>
     );

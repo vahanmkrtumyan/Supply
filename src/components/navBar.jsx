@@ -16,7 +16,7 @@ class Navbar extends Component {
 
     render() {
         const { currentUser } = this.state;
-        console.log(currentUser);
+        
         return (
             <nav className="navbar">
                 {/*<button

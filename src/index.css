@@ -139,7 +139,7 @@ main.container {
 .table td {
     padding: 10px;
     text-align: center;
-    vert-align: middle;
+    vertical-align: middle;
 
 }
 
