@@ -100,11 +100,13 @@ body {
 #root {
   height: 100%;
   background-image: linear-gradient(to right top, #b3b3b3, #bdbdbd, #eae7e7, #e6e6e6, #f7f7f7, #ffffff, #ffffff);
+  background-image: url('components/UI/photos/img.jpg')
 }
 
 main.container {
   height: calc(100vh - 150px);
   width: 100%;
+  
 }
 
 .clickable {
@@ -274,6 +276,7 @@ table td:last-child, table td:nth-last-child(2) {
     align-items: center;
     justify-content: space-between;
     height: 100%;
+    
 }
 .footer a {
     color: rgba(255, 255, 255, 0.7);
