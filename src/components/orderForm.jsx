@@ -161,7 +161,7 @@ class OrderForm extends Form {
 
   render() {
     return (
-      <div className="box form w-600">
+      <div className="box form w-550">
         <h2>Նոր հայտարարություն</h2>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "ID", "", "1")}
@@ -170,14 +170,18 @@ class OrderForm extends Form {
           {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}
           {this.renderSelect("contact", "Կոնտակտ", this.state.contacts)}
           {this.renderInput("comment", "Մեկնաբանություն")}
-          <input
-            type="file"
-            name={this.state.data.name}
-            onChange={this.handleSelect}
-          />
-          <br />
-          <br />
-          <button className="btn btn-primary">Save</button>
+          <div className="upload-btn-wrapper">
+              <button className="upload-btn">Upload a file</button>
+              <input
+                  type="file"
+                  name={this.state.data.name}
+                  onChange={this.handleSelect}
+              />
+          </div>
+          <div className="pt-15">
+              <button className="btn btn-primary">Save</button>
+          </div>
+
         </form>
       </div>
     );
