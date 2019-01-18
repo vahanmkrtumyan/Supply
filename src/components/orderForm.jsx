@@ -76,7 +76,7 @@ class OrderForm extends Form {
       dailyRentalRate: order.dailyRentalRate,
       contact: order.contact,
       comment: order.comment,
-      imageURL: order.imageURL || "0"
+      imageURL: order.imageURL || ""
       //  fileName: ider.fileName || "0"
     };
   }
@@ -91,7 +91,7 @@ class OrderForm extends Form {
       dailyRentalRate: this.state.data.dailyRentalRate,
       contact: this.state.data.contact,
       comment: this.state.data.comment,
-      imageURL: this.state.data.imageURL,
+      imageURL: this.state.data.imageURL=== "0" ? "": this.state.data.imageURL,
       fileName: this.state.data.fileName || "0"
     };
     database

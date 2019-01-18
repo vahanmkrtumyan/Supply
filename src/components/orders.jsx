@@ -122,11 +122,11 @@ class Orders extends Component {
 
     //if (user && user.email === "vahanmkrtumyan@gmail.com")
     return (
-      <div className="row box">
+      <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
         <div className="col">
 
           <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
-            <div className="row flex pb-20">
+            <div className="row flex pb-20" >
                 <SearchBox value={searchQuery} onChange={this.handleSearch} />
                 <div className="col-sm-6 text-right">
                     <Link
