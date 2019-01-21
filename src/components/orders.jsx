@@ -11,6 +11,7 @@ import SearchBox from "./searchBox";
 import { ClipLoader } from "react-spinners";
 import "./Spinner.css";
 import "./UI/Modal/modal.css";
+import Logos from "./logos";
 import Backdrop from "./UI/Backdrop/backdrop";
 
 class Orders extends Component {
@@ -38,9 +39,25 @@ class Orders extends Component {
     database
       .ref()
       .child("orders")
-      .child(order)
+      .child(order.id)
       .remove();
-  //    database.ref().child(uid).child(img).remove()
+
+    // let image = order.fileName
+    // console.log(order)
+
+    /* database
+      .ref()
+      .child('images')
+      .child(image)
+      .delete()
+      .then(() => {
+        console.log(
+          `Successfully deleted photo with UID: ${order}, userUID : ${order}`
+        );
+      })
+      .catch(err => {
+        console.log(`Failed to remove photo, error:`);
+      }); */
   };
 
   handlePageChange = page => {
@@ -57,6 +74,18 @@ class Orders extends Component {
 
   openModal = order => {
     this.setState({ order, show: true });
+
+    let orderNew = { ...order };
+    orderNew.count = orderNew.count + 1;
+    console.log(orderNew);
+
+    this.setState({ order: orderNew }, () =>
+      database
+        .ref()
+        .child("orders")
+        .child(order.id)
+        .set(this.state.order)
+    );
   };
 
   closeModal = () => {
@@ -124,42 +153,42 @@ class Orders extends Component {
     return (
       <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
         <div className="col">
-
           <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
-            <div className="row flex pb-20" >
-                <SearchBox value={searchQuery} onChange={this.handleSearch} />
-                <div className="col-sm-6 text-right">
-                    <Link
-                        to="/orders/new"
-                        className="btn"
-                        style={{ marginBottom: 20 }}
-                    >
-                        Նոր հայտարարություն
-                    </Link>
-                </div>
-
+          <div className="row flex pb-20">
+            <SearchBox value={searchQuery} onChange={this.handleSearch} />
+            <div className="col-sm-6 text-right">
+              <Link
+                to="/orders/new"
+                className="btn"
+                style={{ marginBottom: 20 }}
+              >
+                Նոր հայտարարություն
+              </Link>
             </div>
-            <OrdersTable
-              orders={orders}
-              sortColumn={sortColumn}
-              onDelete={this.handleDelete}
-              onUpdate={this.handleUpdate}
-              onSort={this.handleSort}
-              onOpen={this.openModal}
-            />
+          </div>
+
+          <OrdersTable
+            orders={orders}
+            sortColumn={sortColumn}
+            onDelete={this.handleDelete}
+            onUpdate={this.handleUpdate}
+            onSort={this.handleSort}
+            onOpen={this.openModal}
+          />
           <Pagination
             itemsCount={totalCount}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={this.handlePageChange}
           />
+          <Logos />
         </div>
         <OrderView
           order={this.state.order}
           close={this.closeModal}
           show={this.state.show}
         />
-        <Backdrop show={show} close={this.closeModal}/>
+        <Backdrop show={show} close={this.closeModal} />
       </div>
     );
 

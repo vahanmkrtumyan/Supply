@@ -13,6 +13,7 @@ class OrdersTable extends Component {
     { path: "numberInStock", label: "Ծավալ", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.numberInStock}</p> },
     { path: "dailyRentalRate", label: "Վերջնաժամկետ", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.dailyRentalRate}</p> },
     { path: "contact", label: "Կոնտակտ", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.contact}</p> },
+    { path: "count", label: "Մուտքեր", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.count}</p> },
     {
       key: "update",
       content: order => (
@@ -25,7 +26,7 @@ class OrdersTable extends Component {
       key: "delete",
       content: order => (
         <button
-          onClick={() => this.props.onDelete(order.id)}
+          onClick={() => this.props.onDelete(order)}
           className="btn-icon delete"
         >
           <i className="fa fa-trash"></i>

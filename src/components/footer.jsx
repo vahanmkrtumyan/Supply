@@ -8,7 +8,7 @@ const Footer = () => {
                 <p>© 2019 Copyright</p>
                 <div>
                     <span>Tell:</span>
-                    <a className="" href="#">+37455115551</a>
+                    <a className="" href="#">+37499345639</a>
                 </div>
 
             </div>

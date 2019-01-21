@@ -14,15 +14,16 @@ class OrderForm extends Form {
       dailyRentalRate: "",
       contact: "",
       imageURL: "0",
-      comment: ""
-      //    fileName: "",
+      comment: "",
+      fileName: "",
     },
     contacts: [
-      { id: "Իգոր: 09345639", name: "Իգոր" },
-      { id: "Արարատ: 099910301", name: "Արարատ" },
-      { id: "Վահե։ 077450210", name: "Վահե" }
+      { id: "09345639", name: "Իգոր" },
+      { id: "099910301", name: "Արարատ" },
+      { id: "077450210", name: "Վահե" }
     ],
-    errors: {}
+    errors: {},
+    disabled: ""
   };
 
   schema = {
@@ -76,8 +77,9 @@ class OrderForm extends Form {
       dailyRentalRate: order.dailyRentalRate,
       contact: order.contact,
       comment: order.comment,
-      imageURL: order.imageURL || ""
-      //  fileName: ider.fileName || "0"
+      imageURL: order.imageURL || "",
+      fileName: order.fileName || "",
+      count: null
     };
   }
 
@@ -91,8 +93,10 @@ class OrderForm extends Form {
       dailyRentalRate: this.state.data.dailyRentalRate,
       contact: this.state.data.contact,
       comment: this.state.data.comment,
-      imageURL: this.state.data.imageURL=== "0" ? "": this.state.data.imageURL,
-      fileName: this.state.data.fileName || "0"
+      imageURL:
+        this.state.data.imageURL === "0" ? "" : this.state.data.imageURL,
+      fileName: this.state.data.fileName || "0",
+      count: this.state.data.count || 0
     };
     database
       .ref()
@@ -115,7 +119,8 @@ class OrderForm extends Form {
       .put(file, metadata);
     const data = this.state.data;
     data.fileName = file.name;
-    //         this.setState({filename})
+
+    this.setState({data})
 
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(
@@ -123,6 +128,10 @@ class OrderForm extends Form {
       snapshot => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        if (progress < 1) {
+          this.setState({ disabled: "disabled" });
+          console.log(this.state.disabled);
+        }
         console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused": // or 'paused'
@@ -171,17 +180,18 @@ class OrderForm extends Form {
           {this.renderSelect("contact", "Կոնտակտ", this.state.contacts)}
           {this.renderInput("comment", "Մեկնաբանություն")}
           <div className="upload-btn-wrapper">
-              <button className="upload-btn">Upload a file</button>
-              <input
-                  type="file"
-                  name={this.state.data.name}
-                  onChange={this.handleSelect}
-              />
+            <button className="upload-btn">Upload a file</button>
+            <input
+              type="file"
+              name={this.state.data.name}
+              onChange={this.handleSelect}
+            />
           </div>
           <div className="pt-15">
-              <button className="btn btn-primary">Save</button>
+            <button className="btn btn-primary" disabled={!this.state.disabled}>
+              Save
+            </button>
           </div>
-
         </form>
       </div>
     );
