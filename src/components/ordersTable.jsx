@@ -7,18 +7,52 @@ class OrdersTable extends Component {
     {
       path: "title",
       label: "ID",
-      content: order => <p onClick={()=>this.props.onOpen(order)}>{order.title}</p>
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.title}</p>
+      )
     },
-    { path: "name", label: "Անվանում", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.name}</p> },
-    { path: "numberInStock", label: "Ծավալ", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.numberInStock}</p> },
-    { path: "dailyRentalRate", label: "Վերջնաժամկետ", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.dailyRentalRate}</p> },
-    { path: "contact", label: "Կոնտակտ", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.contact}</p> },
-    { path: "count", label: "Մուտքեր", content: order => <p onClick={()=>this.props.onOpen(order)}>{order.count}</p> },
+    {
+      path: "name",
+      label: "Անվանում",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.name}</p>
+      )
+    },
+    {
+      path: "numberInStock",
+      label: "Ծավալ",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.numberInStock}</p>
+      )
+    },
+    {
+      path: "dailyRentalRate",
+      label: "Վերջնաժամկետ",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.dailyRentalRate}</p>
+      )
+    },
+    {
+      path: "contact",
+      label: "Կոնտակտ",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.contact}</p>
+      )
+    },
+    {
+      path: "count",
+      label: "Դիտումներ",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.count}</p>
+      )
+    },
     {
       key: "update",
       content: order => (
         <Link to={`/orders/${order.id}`}>
-          <button className="btn-icon edit"><i className="fa fa-pencil"></i></button>
+          <button className="btn-icon edit">
+            <i className="fa fa-pencil" />
+          </button>
         </Link>
       )
     },
@@ -29,7 +63,7 @@ class OrdersTable extends Component {
           onClick={() => this.props.onDelete(order)}
           className="btn-icon delete"
         >
-          <i className="fa fa-trash"></i>
+          <i className="fa fa-trash" />
         </button>
       )
     }
