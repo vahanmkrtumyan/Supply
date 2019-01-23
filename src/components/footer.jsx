@@ -7,8 +7,7 @@ const Footer = () => {
             <div className="container">
                 <p>© 2019 Copyright</p>
                 <div>
-                    <span>Tell:</span>
-                    <a className="" href="#">+37499345639</a>
+                    <span>Tel: +37499345639</span>
                 </div>
 
             </div>

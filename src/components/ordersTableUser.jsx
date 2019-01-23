@@ -1,15 +1,45 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Table from "./common/table";
 
-class OrdersTableUser extends Component {
-  
+class OrdersTable extends Component {
   columns = [
     {
       path: "title",
-      label: "ID" },
-    { path: "name", label: "Անվանում" },
-    { path: "numberInStock", label: "Ծավալ" },
-    { path: "dailyRentalRate", label: "Վերջնաժամկետ" },
+      label: "ID",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.title}</p>
+      )
+    },
+    {
+      path: "name",
+      label: "Անվանում",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.name}</p>
+      )
+    },
+    {
+      path: "numberInStock",
+      label: "Ծավալ",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.numberInStock}</p>
+      )
+    },
+    {
+      path: "dailyRentalRate",
+      label: "Վերջնաժամկետ",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.dailyRentalRate}</p>
+      )
+    },
+    {
+      path: "contact",
+      label: "Կոնտակտ",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.contact}</p>
+      )
+    },
+    
   ];
 
   render() {
@@ -26,4 +56,4 @@ class OrdersTableUser extends Component {
   }
 }
 
-export default OrdersTableUser;
+export default OrdersTable;

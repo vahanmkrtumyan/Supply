@@ -113,6 +113,7 @@ class Orders extends Component {
   };
 
   render() {
+    const { user } = this.props;
     const { length: count } = this.state.orders;
     const { pageSize, currentPage, sortColumn, searchQuery, show } = this.state;
 
@@ -126,15 +127,14 @@ class Orders extends Component {
           />
         </div>
       );
-    /*if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
+    if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
       return (
-
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
         </div>
-      ); */
+      );
 
-    if (count === 0 /*&& user && user.email === "vahanmkrtumyan@gmail.com"*/)
+    if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com")
       return (
         <div className="box">
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
@@ -149,25 +149,58 @@ class Orders extends Component {
       );
     const { totalCount, data: orders } = this.getPagedData();
 
-    //if (user && user.email === "vahanmkrtumyan@gmail.com")
+    if (user && user.email === "vahanmkrtumyan@gmail.com")
+      return (
+        <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
+          <div className="col">
+            <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
+            <div className="row flex pb-20">
+              <SearchBox value={searchQuery} onChange={this.handleSearch} />
+              <div className="col-sm-6 text-right">
+                <Link
+                  to="/orders/new"
+                  className="btn"
+                  style={{ marginBottom: 20 }}
+                >
+                  Նոր հայտարարություն
+                </Link>
+              </div>
+            </div>
+
+            <OrdersTable
+              orders={orders}
+              sortColumn={sortColumn}
+              onDelete={this.handleDelete}
+              onUpdate={this.handleUpdate}
+              onSort={this.handleSort}
+              onOpen={this.openModal}
+            />
+            <Pagination
+              itemsCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
+            />
+            <Logos />
+          </div>
+          <OrderView
+            order={this.state.order}
+            close={this.closeModal}
+            show={this.state.show}
+          />
+          <Backdrop show={show} close={this.closeModal} />
+        </div>
+      );
+
     return (
       <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
         <div className="col">
           <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
           <div className="row flex pb-20">
             <SearchBox value={searchQuery} onChange={this.handleSearch} />
-            <div className="col-sm-6 text-right">
-              <Link
-                to="/orders/new"
-                className="btn"
-                style={{ marginBottom: 20 }}
-              >
-                Նոր հայտարարություն
-              </Link>
-            </div>
           </div>
 
-          <OrdersTable
+          <OrdersTableUser
             orders={orders}
             sortColumn={sortColumn}
             onDelete={this.handleDelete}
@@ -191,29 +224,6 @@ class Orders extends Component {
         <Backdrop show={show} close={this.closeModal} />
       </div>
     );
-
-    /*return (
-      <div className="row">
-        <div className="col-3" />
-        <div className="col">
-          <p>Ընդամենը {totalCount} հայտարարություն։</p>
-          <SearchBox value={searchQuery} onChange={this.handleSearch} />
-          <OrdersTableUser
-            orders={orders}
-            sortColumn={sortColumn}
-            onDelete={this.handleDelete}
-            onUpdate={this.handleUpdate}
-            onSort={this.handleSort}
-          />
-          <Pagination
-            itemsCount={totalCount}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onPageChange={this.handlePageChange}
-          />
-        </div>
-      </div>
-    );*/
   }
 }
 
