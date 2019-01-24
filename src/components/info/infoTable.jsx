@@ -42,7 +42,7 @@ class InfoTable extends Component {
     {
       key: "update",
       content: order => (
-        <Link to={`/orders/${order.id}`}>
+        <Link to={`/suppliers/${order.id}`}>
           <button className="btn-icon edit">
             <i className="fa fa-pencil" />
           </button>
