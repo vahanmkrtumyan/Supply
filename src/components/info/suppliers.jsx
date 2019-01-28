@@ -152,7 +152,7 @@ class Suppliers extends Component {
       return (
         <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
           <div className="col">
-            <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
+            <p className="pb-15 count-text">Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։</p>
             <div className="row flex pb-20">
               <SearchBox value={searchQuery} onChange={this.handleSearch} />
               <div className="col-sm-6 text-right">
@@ -161,7 +161,7 @@ class Suppliers extends Component {
                   className="btn"
                   style={{ marginBottom: 20 }}
                 >
-                  Նոր հայտարարություն
+                    <span className="plus">+</span> <span>ավելացնել նոր</span>
                 </Link>
               </div>
             </div>
@@ -193,7 +193,7 @@ class Suppliers extends Component {
     return (
       <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
         <div className="col">
-          <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
+          <p className="pb-15 count-text">Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։</p>
           <div className="row flex pb-20">
             <SearchBox value={searchQuery} onChange={this.handleSearch} />
           </div>

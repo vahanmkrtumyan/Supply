@@ -15,216 +15,216 @@ import Logos from "./logos";
 import Backdrop from "./UI/Backdrop/backdrop";
 
 class Orders extends Component {
-  state = {
-    orders: [],
-    currentPage: 1,
-    pageSize: 8,
-    searchQuery: "",
-    sortColumn: { path: "id", order: "asc" },
-    loading: true,
-    show: false,
-    order: {}
-  };
+    state = {
+        orders: [],
+        currentPage: 1,
+        pageSize: 8,
+        searchQuery: "",
+        sortColumn: { path: "id", order: "asc" },
+        loading: true,
+        show: false,
+        order: {}
+    };
 
-  componentDidMount() {
-    database.ref("orders").on("value", snapshot => {
-      if (snapshot.val() !== null) {
-        const datas = Object.values(snapshot.val());
-        this.setState({ orders: datas, loading: false });
-      }
-    });
-  }
+    componentDidMount() {
+        database.ref("orders").on("value", snapshot => {
+            if (snapshot.val() !== null) {
+                const datas = Object.values(snapshot.val());
+                this.setState({ orders: datas, loading: false });
+            }
+        });
+    }
 
-  handleDelete = order => {
-    database
-      .ref()
-      .child("orders")
-      .child(order.id)
-      .remove();
+    handleDelete = order => {
+        database
+            .ref()
+            .child("orders")
+            .child(order.id)
+            .remove();
 
-    // let image = order.fileName
-    // console.log(order)
+        // let image = order.fileName
+        // console.log(order)
 
-    /* database
-      .ref()
-      .child('images')
-      .child(image)
-      .delete()
-      .then(() => {
-        console.log(
-          `Successfully deleted photo with UID: ${order}, userUID : ${order}`
+        /* database
+          .ref()
+          .child('images')
+          .child(image)
+          .delete()
+          .then(() => {
+            console.log(
+              `Successfully deleted photo with UID: ${order}, userUID : ${order}`
+            );
+          })
+          .catch(err => {
+            console.log(`Failed to remove photo, error:`);
+          }); */
+    };
+
+    handlePageChange = page => {
+        this.setState({ currentPage: page });
+    };
+
+    handleSearch = query => {
+        this.setState({ searchQuery: query, currentPage: 1 });
+    };
+
+    handleSort = sortColumn => {
+        this.setState({ sortColumn });
+    };
+
+    openModal = order => {
+        this.setState({ order, show: true });
+
+        let orderNew = { ...order };
+        orderNew.count = orderNew.count + 1;
+        console.log(orderNew);
+
+        this.setState({ order: orderNew }, () =>
+            database
+                .ref()
+                .child("orders")
+                .child(order.id)
+                .set(this.state.order)
         );
-      })
-      .catch(err => {
-        console.log(`Failed to remove photo, error:`);
-      }); */
-  };
+    };
 
-  handlePageChange = page => {
-    this.setState({ currentPage: page });
-  };
+    closeModal = () => {
+        this.setState({ show: false });
+    };
 
-  handleSearch = query => {
-    this.setState({ searchQuery: query, currentPage: 1 });
-  };
+    getPagedData = () => {
+        const {
+            pageSize,
+            currentPage,
+            sortColumn,
+            searchQuery,
+            orders: allOrders
+        } = this.state;
 
-  handleSort = sortColumn => {
-    this.setState({ sortColumn });
-  };
+        let filtered = allOrders.filter(m =>
+            m.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
 
-  openModal = order => {
-    this.setState({ order, show: true });
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
-    let orderNew = { ...order };
-    orderNew.count = orderNew.count + 1;
-    console.log(orderNew);
+        const orders = paginate(sorted, currentPage, pageSize);
 
-    this.setState({ order: orderNew }, () =>
-      database
-        .ref()
-        .child("orders")
-        .child(order.id)
-        .set(this.state.order)
-    );
-  };
+        return { totalCount: filtered.length, data: orders };
+    };
 
-  closeModal = () => {
-    this.setState({ show: false });
-  };
+    render() {
+        const { user } = this.props;
+        const { length: count } = this.state.orders;
+        const { pageSize, currentPage, sortColumn, searchQuery, show } = this.state;
 
-  getPagedData = () => {
-    const {
-      pageSize,
-      currentPage,
-      sortColumn,
-      searchQuery,
-      orders: allOrders
-    } = this.state;
+        if (this.state.loading)
+            return (
+                <div className="Spinner">
+                    <ClipLoader
+                        color={"#123abc"}
+                        loading={this.state.loading}
+                        size={200}
+                    />
+                </div>
+            );
+        if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
+            return (
+                <div>
+                    <p>Տվյալ պահին հայտարարություններ չկան։</p>
+                </div>
+            );
 
-    let filtered = allOrders.filter(m =>
-      m.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+        if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com")
+            return (
+                <div className="box">
+                    <p>Տվյալ պահին հայտարարություններ չկան։</p>
+                    <Link
+                        to="/orders/new"
+                        className="btn btn-primary"
+                        style={{ marginBottom: 20 }}
+                    >
+                        Նոր հայտ
+                    </Link>
+                </div>
+            );
+        const { totalCount, data: orders } = this.getPagedData();
 
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+        if (user && user.email === "vahanmkrtumyan@gmail.com")
+            return (
+                <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
+                    <div className="col">
+                        <p className="pb-15 count-text">Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։</p>
+                        <div className="row flex pb-20">
+                            <SearchBox value={searchQuery} onChange={this.handleSearch} />
+                            <div className="col-sm-6 text-right">
+                                <Link
+                                    to="/orders/new"
+                                    className="btn"
+                                    style={{ marginBottom: 20 }}
+                                >
+                                    <span className="plus">+</span> <span>ավելացնել նոր</span>
+                                </Link>
+                            </div>
+                        </div>
 
-    const orders = paginate(sorted, currentPage, pageSize);
+                        <OrdersTable
+                            orders={orders}
+                            sortColumn={sortColumn}
+                            onDelete={this.handleDelete}
+                            onUpdate={this.handleUpdate}
+                            onSort={this.handleSort}
+                            onOpen={this.openModal}
+                        />
+                        <Pagination
+                            itemsCount={totalCount}
+                            pageSize={pageSize}
+                            currentPage={currentPage}
+                            onPageChange={this.handlePageChange}
+                        />
+                        <Logos />
+                    </div>
+                    <OrderView
+                        order={this.state.order}
+                        close={this.closeModal}
+                        show={this.state.show}
+                    />
+                    <Backdrop show={show} close={this.closeModal} />
+                </div>
+            );
 
-    return { totalCount: filtered.length, data: orders };
-  };
+        return (
+            <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
+                <div className="col">
+                    <p className="pb-15 count-text">Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։</p>
+                    <div className="row flex pb-20">
+                        <SearchBox value={searchQuery} onChange={this.handleSearch} />
+                    </div>
 
-  render() {
-    const { user } = this.props;
-    const { length: count } = this.state.orders;
-    const { pageSize, currentPage, sortColumn, searchQuery, show } = this.state;
-
-    if (this.state.loading)
-      return (
-        <div className="Spinner">
-          <ClipLoader
-            color={"#123abc"}
-            loading={this.state.loading}
-            size={200}
-          />
-        </div>
-      );
-    if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
-      return (
-        <div>
-          <p>Տվյալ պահին հայտարարություններ չկան։</p>
-        </div>
-      );
-
-    if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com")
-      return (
-        <div className="box">
-          <p>Տվյալ պահին հայտարարություններ չկան։</p>
-          <Link
-            to="/orders/new"
-            className="btn btn-primary"
-            style={{ marginBottom: 20 }}
-          >
-            Նոր հայտ
-          </Link>
-        </div>
-      );
-    const { totalCount, data: orders } = this.getPagedData();
-
-    if (user && user.email === "vahanmkrtumyan@gmail.com")
-      return (
-        <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
-          <div className="col">
-            <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
-            <div className="row flex pb-20">
-              <SearchBox value={searchQuery} onChange={this.handleSearch} />
-              <div className="col-sm-6 text-right">
-                <Link
-                  to="/orders/new"
-                  className="btn"
-                  style={{ marginBottom: 20 }}
-                >
-                  Նոր հայտարարություն
-                </Link>
-              </div>
+                    <OrdersTableUser
+                        orders={orders}
+                        sortColumn={sortColumn}
+                        onDelete={this.handleDelete}
+                        onUpdate={this.handleUpdate}
+                        onSort={this.handleSort}
+                        onOpen={this.openModal}
+                    />
+                    <Pagination
+                        itemsCount={totalCount}
+                        pageSize={pageSize}
+                        currentPage={currentPage}
+                        onPageChange={this.handlePageChange}
+                    />
+                    <Logos />
+                </div>
+                <OrderView
+                    order={this.state.order}
+                    close={this.closeModal}
+                    show={this.state.show}
+                />
+                <Backdrop show={show} close={this.closeModal} />
             </div>
-
-            <OrdersTable
-              orders={orders}
-              sortColumn={sortColumn}
-              onDelete={this.handleDelete}
-              onUpdate={this.handleUpdate}
-              onSort={this.handleSort}
-              onOpen={this.openModal}
-            />
-            <Pagination
-              itemsCount={totalCount}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={this.handlePageChange}
-            />
-            <Logos />
-          </div>
-          <OrderView
-            order={this.state.order}
-            close={this.closeModal}
-            show={this.state.show}
-          />
-          <Backdrop show={show} close={this.closeModal} />
-        </div>
-      );
-
-    return (
-      <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
-        <div className="col">
-          <p className="pb-15">Ընդամենը {totalCount} հայտարարություն։</p>
-          <div className="row flex pb-20">
-            <SearchBox value={searchQuery} onChange={this.handleSearch} />
-          </div>
-
-          <OrdersTableUser
-            orders={orders}
-            sortColumn={sortColumn}
-            onDelete={this.handleDelete}
-            onUpdate={this.handleUpdate}
-            onSort={this.handleSort}
-            onOpen={this.openModal}
-          />
-          <Pagination
-            itemsCount={totalCount}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onPageChange={this.handlePageChange}
-          />
-          <Logos />
-        </div>
-        <OrderView
-          order={this.state.order}
-          close={this.closeModal}
-          show={this.state.show}
-        />
-        <Backdrop show={show} close={this.closeModal} />
-      </div>
-    );
-  }
+        );
+    }
 }
 
 export default Orders;
