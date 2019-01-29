@@ -464,3 +464,9 @@ input:focus, select:focus {
         width: 760px !important;
     }
 }
+
+@media (max-width: 1024px) {
+    .fixed-ad {
+        display: none;
+    }
+}
