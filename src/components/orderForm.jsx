@@ -14,7 +14,7 @@ class OrderForm extends Form {
       dailyRentalRate: "",
       contact: "",
       imageURL: "0",
-      comment: "",
+      comment: "Սույն հայտարարությունը վերաբերում է միայն ՀՀ տարածքում գործող կազմակերպությունների համար։",
       fileName: ""
     },
     contacts: [
