@@ -15,7 +15,7 @@ class OrderForm extends Form {
       contact: "",
       imageURL: "0",
       comment: "",
-      fileName: "",
+      fileName: ""
     },
     contacts: [
       { id: "09345639", name: "Իգոր" },
@@ -23,7 +23,7 @@ class OrderForm extends Form {
       { id: "077450210", name: "Վահե" }
     ],
     errors: {},
-    disabled: ""
+    disabled: false
   };
 
   schema = {
@@ -120,7 +120,7 @@ class OrderForm extends Form {
     const data = this.state.data;
     data.fileName = file.name;
 
-    this.setState({data})
+    this.setState({ data });
 
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(
@@ -128,7 +128,7 @@ class OrderForm extends Form {
       snapshot => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        if (progress < 1) {
+        if (0 < progress < 1) {
           this.setState({ disabled: "disabled" });
           console.log(this.state.disabled);
         }
@@ -142,6 +142,7 @@ class OrderForm extends Form {
             break;
         }
       },
+
       error => {
         // A full list of error codes is available at
         // https://firebase.google.com/docs/storage/web/handle-errors
@@ -163,6 +164,7 @@ class OrderForm extends Form {
           data.imageURL = downloadURL;
 
           this.setState({ data }, () => console.log(this.state.data.imageURL));
+          this.setState({ disabled: false });
         });
       }
     );
@@ -188,7 +190,7 @@ class OrderForm extends Form {
             />
           </div>
           <div className="pt-15">
-            <button className="btn btn-primary" disabled={!this.state.disabled}>
+            <button className="btn btn-primary" disabled={this.state.disabled}>
               Save
             </button>
           </div>
