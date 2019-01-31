@@ -113,9 +113,8 @@ class OrderForm extends Form {
     var metadata = {
       conetentType: "image/jpeg"
     };
-    var storageRef = storage.ref();
+    var storageRef = storage.ref("images/" + file.name);
     var uploadTask = storageRef
-      .child("images/" + file.name)
       .put(file, metadata);
     const data = this.state.data;
     data.fileName = file.name;
@@ -128,6 +127,7 @@ class OrderForm extends Form {
       snapshot => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        
         if (0 < progress < 1) {
           this.setState({ disabled: "disabled" });
           console.log(this.state.disabled);
