@@ -24,7 +24,8 @@ class OrderForm extends Form {
       { id: "077450210", name: "Վահե" }
     ],
     errors: {},
-    disabled: false
+    disabled: false,
+    progress: 0
   };
 
   schema = {
@@ -140,12 +141,22 @@ class OrderForm extends Form {
       "state_changed", // or 'state_changed'
       snapshot => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.setState()
+        var prg = progress.toString( )
         if (0 < progress < 1) {
           this.setState({ disabled: "disabled" });
           console.log(this.state.disabled);
         }
+        if (progress =25) {
+          this.setState({progress})
+        };
+        if (progress =50) {
+          this.setState({progress})
+        };
+        if (progress =100) {
+          this.setState({progress})
+        };
         console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused": // or 'paused'
@@ -204,7 +215,7 @@ class OrderForm extends Form {
             />
           </div>
           <div className="pt-15">
-            <progress value={this.prg} max="100" />
+            <progress  value={this.state.progress} max="100" />
             <br />
             <br />
             <button className="btn btn-primary">Save</button>
