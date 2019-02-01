@@ -142,21 +142,21 @@ class OrderForm extends Form {
       snapshot => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.setState()
-        var prg = progress.toString( )
+        this.setState();
+        var prg = progress.toString();
         if (0 < progress < 1) {
           this.setState({ disabled: "disabled" });
           console.log(this.state.disabled);
         }
-        if (progress =25) {
-          this.setState({progress})
-        };
-        if (progress =50) {
-          this.setState({progress})
-        };
-        if (progress =100) {
-          this.setState({progress})
-        };
+        if ((progress = 25)) {
+          this.setState({ progress });
+        }
+        if ((progress = 50)) {
+          this.setState({ progress });
+        }
+        if ((progress = 100)) {
+          this.setState({ progress });
+        }
         console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused": // or 'paused'
@@ -202,7 +202,7 @@ class OrderForm extends Form {
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "ID", "", "1")}
           {this.renderInput("name", "Ապրանք")}
-          {this.renderInput("numberInStock", "Ծավալ", "number")}
+          {this.renderInput("numberInStock", "Ծավալ")}
           {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}
           {this.renderSelect("contact", "Կոնտակտ", this.state.contacts)}
           {this.renderInput("comment", "Մեկնաբանություն")}
@@ -215,7 +215,7 @@ class OrderForm extends Form {
             />
           </div>
           <div className="pt-15">
-            <progress  value={this.state.progress} max="100" />
+            <progress value={this.state.progress} max="100" />
             <br />
             <br />
             <button className="btn btn-primary">Save</button>
