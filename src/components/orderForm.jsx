@@ -13,9 +13,10 @@ class OrderForm extends Form {
       numberInStock: "",
       dailyRentalRate: "",
       contact: "",
-      imageURL: "0",
-      comment: "Սույն հայտարարությունը վերաբերում է միայն ՀՀ տարածքում գործող կազմակերպությունների համար։",
-      fileName: ""
+      imageURL: "as",
+      comment:
+        "Սույն հայտարարությունը վերաբերում է միայն ՀՀ տարածքում գործող կազմակերպությունների համար։",
+      fileName: "as"
     },
     contacts: [
       { id: "09345639", name: "Իգոր" },
@@ -27,7 +28,7 @@ class OrderForm extends Form {
   };
 
   schema = {
-    id: Joi.string(),
+    id: Joi.number().required(),
     title: Joi.number()
       .required()
       .label("Հայատարարության համար"),
@@ -44,9 +45,18 @@ class OrderForm extends Form {
       .required()
       .label("Կոնտակտ"),
     imageURL: Joi.string().label("Նկար"),
-    comment: Joi.string()
-      .required()
-      .label("Մեկնաբանություն")
+    comment: Joi.string().label("Մեկնաբանություն"),
+    fileName: Joi.string()
+  };
+
+  validate = () => {
+    const options = { abortEarly: false };
+    const { error } = Joi.validate(this.state.data, this.schema, options);
+    if (!error) return null;
+
+    const errors = {};
+    for (let item of error.details) errors[item.path[0]] = item.message;
+    return errors;
   };
 
   componentDidMount() {
@@ -77,14 +87,19 @@ class OrderForm extends Form {
       dailyRentalRate: order.dailyRentalRate,
       contact: order.contact,
       comment: order.comment,
-      imageURL: order.imageURL || "",
-      fileName: order.fileName || "",
+      imageURL: order.imageURL || "as",
+      fileName: order.fileName || "as",
       count: null
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
+
+    const errors = this.validate();
+    this.setState({ errors: errors || {} });
+    if (errors) return;
+
     const data = {
       id: this.state.data.title,
       title: this.state.data.title,
@@ -94,7 +109,7 @@ class OrderForm extends Form {
       contact: this.state.data.contact,
       comment: this.state.data.comment,
       imageURL:
-        this.state.data.imageURL === "0" ? "" : this.state.data.imageURL,
+        this.state.data.imageURL === "as" ? "" : this.state.data.imageURL,
       fileName: this.state.data.fileName || "0",
       count: this.state.data.count || 0
     };
@@ -114,8 +129,7 @@ class OrderForm extends Form {
       conetentType: "image/jpeg"
     };
     var storageRef = storage.ref("images/" + file.name);
-    var uploadTask = storageRef
-      .put(file, metadata);
+    var uploadTask = storageRef.put(file, metadata);
     const data = this.state.data;
     data.fileName = file.name;
 
@@ -127,7 +141,7 @@ class OrderForm extends Form {
       snapshot => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        
+
         if (0 < progress < 1) {
           this.setState({ disabled: "disabled" });
           console.log(this.state.disabled);
@@ -190,9 +204,10 @@ class OrderForm extends Form {
             />
           </div>
           <div className="pt-15">
-            <button className="btn btn-primary" disabled={this.state.disabled}>
-              Save
-            </button>
+            <progress value={this.prg} max="100" />
+            <br />
+            <br />
+            <button className="btn btn-primary">Save</button>
           </div>
         </form>
       </div>
