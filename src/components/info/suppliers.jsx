@@ -1,20 +1,19 @@
 import React, { Component } from "react";
-import {storage, database } from "./firebase";
+import { database } from "../firebase";
 import { Link } from "react-router-dom";
-import OrdersTable from "./ordersTable";
-import OrdersTableUser from "./ordersTableUser";
-import Pagination from "./common/pagination";
-import { paginate } from "../utils/paginate";
-import OrderView from "../components/orderView";
+import InfoTable from "./infoTable";
+import OrdersTableUser from "../ordersTableUser";
+import Pagination from "../common/pagination";
+import { paginate } from "../../utils/paginate";
+import OrderView from "../orderView";
 import _ from "lodash";
-import SearchBox from "./searchBox";
+import SearchBox from "../searchBox";
 import { ClipLoader } from "react-spinners";
-import "./Spinner.css";
-import "./UI/Modal/modal.css";
-import Logos from "./logos";
-import Backdrop from "./UI/Backdrop/backdrop";
+import "../Spinner.css";
+import "../UI/Modal/modal.css";
+import Backdrop from "../UI/Backdrop/backdrop";
 
-class Orders extends Component {
+class Suppliers extends Component {
   state = {
     orders: [],
     currentPage: 1,
@@ -42,33 +41,22 @@ class Orders extends Component {
       .child(order.id)
       .remove();
 
-
-      var storageRef = storage.ref("images/" + order.fileName);
-      storageRef
-      .delete()
-      .then(function() {
-        // File deleted successfully
-      })
-      .catch(function(error) {
-        // Uh-oh, an error occurred!
-      });
-
     // let image = order.fileName
     // console.log(order)
 
     /* database
-          .ref()
-          .child('images')
-          .child(image)
-          .delete()
-          .then(() => {
-            console.log(
-              `Successfully deleted photo with UID: ${order}, userUID : ${order}`
-            );
-          })
-          .catch(err => {
-            console.log(`Failed to remove photo, error:`);
-          }); */
+      .ref()
+      .child('images')
+      .child(image)
+      .delete()
+      .then(() => {
+        console.log(
+          `Successfully deleted photo with UID: ${order}, userUID : ${order}`
+        );
+      })
+      .catch(err => {
+        console.log(`Failed to remove photo, error:`);
+      }); */
   };
 
   handlePageChange = page => {
@@ -150,7 +138,7 @@ class Orders extends Component {
         <div className="box">
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
           <Link
-            to="/orders/new"
+            to="/suppliers/new"
             className="btn btn-primary"
             style={{ marginBottom: 20 }}
           >
@@ -164,23 +152,21 @@ class Orders extends Component {
       return (
         <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
           <div className="col">
-            <p className="pb-15 count-text">
-              Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։
-            </p>
+            <p className="pb-15 count-text">Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։</p>
             <div className="row flex pb-20">
               <SearchBox value={searchQuery} onChange={this.handleSearch} />
               <div className="col-sm-6 text-right">
                 <Link
-                  to="/orders/new"
+                  to="/suppliers/new"
                   className="btn"
                   style={{ marginBottom: 20 }}
                 >
-                  <span className="plus">+</span> <span>ավելացնել նոր</span>
+                    <span className="plus">+</span> <span>ավելացնել նոր</span>
                 </Link>
               </div>
             </div>
 
-            <OrdersTable
+            <InfoTable
               orders={orders}
               sortColumn={sortColumn}
               onDelete={this.handleDelete}
@@ -194,7 +180,6 @@ class Orders extends Component {
               currentPage={currentPage}
               onPageChange={this.handlePageChange}
             />
-            <Logos />
           </div>
           <OrderView
             order={this.state.order}
@@ -208,9 +193,7 @@ class Orders extends Component {
     return (
       <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
         <div className="col">
-          <p className="pb-15 count-text">
-            Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։
-          </p>
+          <p className="pb-15 count-text">Ընդամենը` <strong> {totalCount} </strong> հայտարարություն։</p>
           <div className="row flex pb-20">
             <SearchBox value={searchQuery} onChange={this.handleSearch} />
           </div>
@@ -229,7 +212,6 @@ class Orders extends Component {
             currentPage={currentPage}
             onPageChange={this.handlePageChange}
           />
-          <Logos />
         </div>
         <OrderView
           order={this.state.order}
@@ -242,4 +224,4 @@ class Orders extends Component {
   }
 }
 
-export default Orders;
+export default Suppliers;

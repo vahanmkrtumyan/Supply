@@ -1,16 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Table from "./common/table";
+import Table from "../common/table";
 
-class OrdersTable extends Component {
+class InfoTable extends Component {
   columns = [
-    {
-      path: "title",
-      label: "ID",
-      content: order => (
-        <p onClick={() => this.props.onOpen(order)}>{order.title}</p>
-      )
-    },
     {
       path: "name",
       label: "Անվանում",
@@ -49,7 +42,7 @@ class OrdersTable extends Component {
     {
       key: "update",
       content: order => (
-        <Link to={`/orders/${order.id}`}>
+        <Link to={`/suppliers/${order.id}`}>
           <button className="btn-icon edit">
             <i className="fa fa-pencil" />
           </button>
@@ -83,4 +76,4 @@ class OrdersTable extends Component {
   }
 }
 
-export default OrdersTable;
+export default InfoTable;

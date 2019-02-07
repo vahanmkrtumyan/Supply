@@ -1,5 +1,5 @@
 import React from "react";
-import { database } from "./firebase";
+import { storage, database } from "./firebase";
 import Joi from "joi-browser";
 import Form from "./common/form";
 
@@ -13,37 +13,51 @@ class OrderForm extends Form {
       numberInStock: "",
       dailyRentalRate: "",
       contact: "",
-      comment: ""
+      imageURL: "as",
+      comment:
+        "Սույն հայտարարությունը վերաբերում է միայն ՀՀ տարածքում գործող կազմակերպությունների համար։",
+      fileName: "as"
     },
     contacts: [
-      { id: "Իգոր: 09345639", name: "Իգոր" },
-      { id: "Արարատ: 099910301", name: "Արարատ" },
-      { id: "Վահե։ 077450210", name: "Վահե" }
+      { id: "09345639", name: "Իգոր" },
+      { id: "099910301", name: "Արարատ" },
+      { id: "077450210", name: "Վահե" }
     ],
-    errors: {}
+    errors: {},
+    disabled: false,
+    progress: 0
   };
 
-
   schema = {
-    id: Joi.string(),
+    id: Joi.number().required(),
     title: Joi.number()
-    .required()
+      .required()
       .label("Հայատարարության համար"),
     name: Joi.string()
       .required()
       .label("Ապրանք"),
     numberInStock: Joi.string()
-    .required()
-    .label("Ծավալ"),
+      .required()
+      .label("Ծավալ"),
     dailyRentalRate: Joi.date()
       .required()
       .label("Վերջնաժամկետ"),
-      contact: Joi.string()
-    .required()
-    .label("Կոնտակտ"),
-    comment: Joi.string()
-    .required()
-    .label("Մեկնաբանություն"),
+    contact: Joi.string()
+      .required()
+      .label("Կոնտակտ"),
+    imageURL: Joi.string().label("Նկար"),
+    comment: Joi.string().label("Մեկնաբանություն"),
+    fileName: Joi.string()
+  };
+
+  validate = () => {
+    const options = { abortEarly: false };
+    const { error } = Joi.validate(this.state.data, this.schema, options);
+    if (!error) return null;
+
+    const errors = {};
+    for (let item of error.details) errors[item.path[0]] = item.message;
+    return errors;
   };
 
   componentDidMount() {
@@ -73,12 +87,20 @@ class OrderForm extends Form {
       numberInStock: order.numberInStock,
       dailyRentalRate: order.dailyRentalRate,
       contact: order.contact,
-      comment: order.comment
+      comment: order.comment,
+      imageURL: order.imageURL || "as",
+      fileName: order.fileName || "as",
+      count: null
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
+
+    const errors = this.validate();
+    this.setState({ errors: errors || {} });
+    if (errors) return;
+
     const data = {
       id: this.state.data.title,
       title: this.state.data.title,
@@ -86,7 +108,11 @@ class OrderForm extends Form {
       numberInStock: this.state.data.numberInStock,
       dailyRentalRate: this.state.data.dailyRentalRate,
       contact: this.state.data.contact,
-      comment: this.state.data.comment
+      comment: this.state.data.comment,
+      imageURL:
+        this.state.data.imageURL === "as" ? "" : this.state.data.imageURL,
+      fileName: this.state.data.fileName || "0",
+      count: this.state.data.count || 0
     };
     database
       .ref()
@@ -97,20 +123,103 @@ class OrderForm extends Form {
     this.props.history.push("/orders");
   };
 
+  handleSelect = e => {
+    const file = e.target.files[0];
+
+    var metadata = {
+      conetentType: "image/jpeg"
+    };
+    var storageRef = storage.ref("images/" + file.name);
+    var uploadTask = storageRef.put(file, metadata);
+    const data = this.state.data;
+    data.fileName = file.name;
+
+    this.setState({ data });
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed", // or 'state_changed'
+      snapshot => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.setState();
+        var prg = progress.toString();
+        if (0 < progress < 1) {
+          this.setState({ disabled: "disabled" });
+          console.log(this.state.disabled);
+        }
+        if ((progress = 25)) {
+          this.setState({ progress });
+        }
+        if ((progress = 50)) {
+          this.setState({ progress });
+        }
+        if ((progress = 100)) {
+          this.setState({ progress });
+        }
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused": // or 'paused'
+            console.log("Upload is paused");
+            break;
+          case "running": // or 'running'
+            console.log("Upload is running");
+            break;
+        }
+      },
+
+      error => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            break;
+
+          case "storage/unknown":
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          console.log(downloadURL);
+          const data = this.state.data;
+          data.imageURL = downloadURL;
+
+          this.setState({ data }, () => console.log(this.state.data.imageURL));
+          this.setState({ disabled: false });
+        });
+      }
+    );
+  };
+
   render() {
     return (
-      <div>
+      <div className="box form w-550">
         <h2>Նոր հայտարարություն</h2>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "ID", "", "1")}
           {this.renderInput("name", "Ապրանք")}
-          {this.renderInput("numberInStock", "Ծավալ", "number")}
+          {this.renderInput("numberInStock", "Ծավալ")}
           {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}
           {this.renderSelect("contact", "Կոնտակտ", this.state.contacts)}
           {this.renderInput("comment", "Մեկնաբանություն")}
-          <button className="btn btn-primary" disabled={this.validate()}>
-        Save
-      </button>
+          <div className="upload-btn-wrapper">
+            <button className="upload-btn">Upload a file</button>
+            <input
+              type="file"
+              name={this.state.data.name}
+              onChange={this.handleSelect}
+            />
+          </div>
+          <div className="pt-15">
+            <progress value={this.state.progress} max="100" />
+            <br />
+            <br />
+            <button className="btn btn-primary">Save</button>
+          </div>
         </form>
       </div>
     );

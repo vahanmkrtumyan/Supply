@@ -10,9 +10,13 @@ const CurrentUser = ({ user }) => {
   };
 
   return (
-    <div>
-      {user.displayName}
-      <img style={styles} src={user.photoURL} alt='' />
+    <div className="flex">
+        <div className="avatar">
+            <img style={styles} src={user.photoURL} alt='' />
+            <span>{user.displayName}</span>
+        </div>
+
+
       <button className="btn btn-warning" onClick={() => auth.signOut()}>
         Sign Out
       </button>
