@@ -35,44 +35,44 @@ class App extends Component {
         <main>
           <ul className="left-fixed fixed-ad">
             <li>
-              <a href="http://www.dalma.am/hy/home" target="_blank">
+              <a href="http://www.dalma.am/hy/home" target="_blank" rel="noopener noreferrer">
                 <img src={Dalma} alt="" />
               </a>
             </li>
             <li>
-              <a href="https://riomall.am" target="_blank">
+              <a href="https://riomall.am" target="_blank" rel="noopener noreferrer">
                 <img src={Rio} alt="" />
               </a>
             </li>
             <li>
-              <a href="http://www.tashirpizza.am" target="_blank">
+              <a href="http://www.tashirpizza.am" target="_blank" rel="noopener noreferrer">
                 <img src={Tashir} alt="" />
               </a>
             </li>
             <li>
-              <a href="https://www.erebuni-plaza.am/" target="_blank">
+              <a href="https://www.erebuni-plaza.am/" target="_blank" rel="noopener noreferrer">
                 <img src={Erebuni} alt="" />
               </a>
             </li>
           </ul>
           <ul className="right-fixed fixed-ad">
             <li>
-              <a href="http://www.dalma.am/hy/home" target="_blank">
+              <a href="http://www.dalma.am/hy/home" target="_blank" rel="noopener noreferrer">
                 <img src={Tconst} alt="" />
               </a>
             </li>
             <li>
-              <a href="https://riomall.am" target="_blank">
+              <a href="https://riomall.am" target="_blank" rel="noopener noreferrer">
                 <img src={Rio} alt="" />
               </a>
             </li>
             <li>
-              <a href="http://www.tashirpizza.am" target="_blank">
+              <a href="http://www.tashirpizza.am" target="_blank" rel="noopener noreferrer">
                 <img src={Tashir} alt="" />
               </a>
             </li>
             <li>
-              <a href="https://www.erebuni-plaza.am/" target="_blank">
+              <a href="https://www.erebuni-plaza.am/" target="_blank" rel="noopener noreferrer">
                 <img src={Erebuni} alt="" />
               </a>
             </li>

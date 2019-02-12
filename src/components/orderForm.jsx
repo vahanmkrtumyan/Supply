@@ -143,7 +143,6 @@ class OrderForm extends Form {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         this.setState();
-        var prg = progress.toString();
         if (0 < progress < 1) {
           this.setState({ disabled: "disabled" });
           console.log(this.state.disabled);
@@ -165,6 +164,8 @@ class OrderForm extends Form {
           case "running": // or 'running'
             console.log("Upload is running");
             break;
+          default:
+            console.log("Upload is paused");
         }
       },
 
@@ -179,6 +180,8 @@ class OrderForm extends Form {
           case "storage/unknown":
             // Unknown error occurred, inspect error.serverResponse
             break;
+          default:
+            console.log("error");
         }
       },
       () => {
