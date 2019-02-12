@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {storage, database } from "./firebase";
+import { storage, database } from "./firebase";
 import { Link } from "react-router-dom";
 import OrdersTable from "./ordersTable";
 import OrdersTableUser from "./ordersTableUser";
@@ -42,9 +42,8 @@ class Orders extends Component {
       .child(order.id)
       .remove();
 
-
-      var storageRef = storage.ref("images/" + order.fileName);
-      storageRef
+    var storageRef = storage.ref("images/" + order.fileName);
+    storageRef
       .delete()
       .then(function() {
         // File deleted successfully
@@ -116,7 +115,7 @@ class Orders extends Component {
       m.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const sorted = _.orderBy(filtered, Number, [sortColumn.order]);
 
     const orders = paginate(sorted, currentPage, pageSize);
 
@@ -132,7 +131,7 @@ class Orders extends Component {
       return (
         <div className="Spinner">
           <ClipLoader
-            color={"#123abc"}
+            color={"#ffffff"}
             loading={this.state.loading}
             size={200}
           />
