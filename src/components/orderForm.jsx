@@ -16,7 +16,8 @@ class OrderForm extends Form {
       imageURL: "as",
       comment:
         "Սույն հայտարարությունը վերաբերում է միայն ՀՀ տարածքում գործող կազմակերպությունների համար։",
-      fileName: "as"
+      fileName: "as",
+      count: 0
     },
     contacts: [
       { id: "09345639", name: "Իգոր" },
@@ -45,9 +46,11 @@ class OrderForm extends Form {
     contact: Joi.string()
       .required()
       .label("Կոնտակտ"),
+
     imageURL: Joi.string().label("Նկար"),
     comment: Joi.string().label("Մեկնաբանություն"),
-    fileName: Joi.string()
+    fileName: Joi.string(),
+    count: Joi.number().label("Քանակ")
   };
 
   validate = () => {
@@ -90,7 +93,7 @@ class OrderForm extends Form {
       comment: order.comment,
       imageURL: order.imageURL || "as",
       fileName: order.fileName || "as",
-      count: null
+      count: order.count
     };
   }
 
@@ -99,6 +102,7 @@ class OrderForm extends Form {
 
     const errors = this.validate();
     this.setState({ errors: errors || {} });
+
     if (errors) return;
 
     const data = {
