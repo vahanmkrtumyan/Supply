@@ -61,6 +61,7 @@ class OrderForm extends Form {
   componentDidMount() {
     firestore
       .collection("orders")
+      .where("title", "==", `${this.props.match.params.id}`)
       // .where(`id`,`==`,`${this.props.match.params.id}`)
       .onSnapshot(snapshot => {
         if (snapshot.docs !== null) {
@@ -76,11 +77,12 @@ class OrderForm extends Form {
             const OrderId = this.props.match.params.id;
             if (OrderId === "new") return;
             const order = getOrder(OrderId);
-            console.log(order, OrderId)
-          
+            console.log(order, OrderId);
+
             if (!order) return this.props.history.replace("/not-found");
-            this.setState({ data: this.mapToViewModel(order[0]) }, () => console.log(this.state.data))
-           
+            this.setState({ data: this.mapToViewModel(order[0]) }, () =>
+              console.log(this.state.data)
+            );
           });
         }
       });
