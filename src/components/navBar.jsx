@@ -39,9 +39,9 @@ class Navbar extends Component {
                         </div>
 
                         <div className="col-sm-8 flex justify-end">
-                            <NavLink className="nav-link" to="/orders">
-                                Հայտարարություններ
-                            </NavLink>
+                            <p className="nav-link" to="/orders">
+                                Հեռ։ 044001492
+                            </p>
                             {currentUser && <CurrentUser user={currentUser} />}
                             {!this.state.loading && !currentUser && <SignIn />}
                         </div>

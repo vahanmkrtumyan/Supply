@@ -26,17 +26,17 @@ class OrdersTable extends Component {
       )
     },
     {
+      path: "unit",
+      label: "Միավոր",
+      content: order => (
+        <p onClick={() => this.props.onOpen(order)}>{order.numberInStock}</p>
+      )
+    },
+    {
       path: "dailyRentalRate",
       label: "Վերջնաժամկետ",
       content: order => (
         <p onClick={() => this.props.onOpen(order)}>{order.dailyRentalRate}</p>
-      )
-    },
-    {
-      path: "contact",
-      label: "Կոնտակտ",
-      content: order => (
-        <p onClick={() => this.props.onOpen(order)}>{order.contact}</p>
       )
     },
     {

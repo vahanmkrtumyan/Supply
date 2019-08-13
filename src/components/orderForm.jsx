@@ -1,5 +1,5 @@
 import React from "react";
-import { storage, database } from "./firebase";
+import { storage, database, firestore } from "./firebase";
 import Joi from "joi-browser";
 import Form from "./common/form";
 
@@ -11,19 +11,14 @@ class OrderForm extends Form {
       title: "",
       name: "",
       numberInStock: "",
+      unit: "",
       dailyRentalRate: "",
-      contact: "",
       imageURL: "as",
       comment:
         "Սույն հայտարարությունը վերաբերում է միայն ՀՀ տարածքում գործող կազմակերպությունների համար։",
       fileName: "as",
       count: 0
     },
-    contacts: [
-      { id: "09345639", name: "Իգոր" },
-      { id: "099910301", name: "Արարատ" },
-      { id: "077450210", name: "Վահե" }
-    ],
     errors: {},
     disabled: false,
     progress: 0
@@ -43,9 +38,9 @@ class OrderForm extends Form {
     dailyRentalRate: Joi.date()
       .required()
       .label("Վերջնաժամկետ"),
-    contact: Joi.string()
+    unit: Joi.string()
       .required()
-      .label("Կոնտակտ"),
+      .label("Միավոր"),
 
     imageURL: Joi.string().label("Նկար"),
     comment: Joi.string().label("Մեկնաբանություն"),
@@ -64,22 +59,31 @@ class OrderForm extends Form {
   };
 
   componentDidMount() {
-    database.ref("orders").on("value", snapshot => {
-      if (snapshot.val() !== null) {
-        const datas = Object.values(snapshot.val());
+    firestore
+      .collection("orders")
+      // .where(`id`,`==`,`${this.props.match.params.id}`)
+      .onSnapshot(snapshot => {
+        if (snapshot.docs !== null) {
+          const datas = snapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() };
+          });
 
-        this.setState({ orders: datas }, () => {
-          const getOrder = id => {
-            return this.state.orders.filter(m => m.id === id);
-          };
-          const OrderId = this.props.match.params.id;
-          if (OrderId === "new") return;
-          const order = getOrder(OrderId);
-          if (!order) return this.props.history.replace("/not-found");
-          this.setState({ data: this.mapToViewModel(order[0]) });
-        });
-      }
-    });
+          this.setState({ orders: datas }, () => {
+            console.log(datas);
+            const getOrder = id => {
+              return this.state.orders.filter(m => m.id == id);
+            };
+            const OrderId = this.props.match.params.id;
+            if (OrderId === "new") return;
+            const order = getOrder(OrderId);
+            console.log(order, OrderId)
+          
+            if (!order) return this.props.history.replace("/not-found");
+            this.setState({ data: this.mapToViewModel(order[0]) }, () => console.log(this.state.data))
+           
+          });
+        }
+      });
   }
 
   mapToViewModel(order) {
@@ -88,8 +92,8 @@ class OrderForm extends Form {
       title: order.title,
       name: order.name,
       numberInStock: order.numberInStock,
+      unit: order.unit,
       dailyRentalRate: order.dailyRentalRate,
-      contact: order.contact,
       comment: order.comment,
       imageURL: order.imageURL || "as",
       fileName: order.fileName || "as",
@@ -111,18 +115,22 @@ class OrderForm extends Form {
       name: this.state.data.name,
       numberInStock: this.state.data.numberInStock,
       dailyRentalRate: this.state.data.dailyRentalRate,
-      contact: this.state.data.contact,
+      unit: this.state.data.unit,
       comment: this.state.data.comment,
       imageURL:
         this.state.data.imageURL === "as" ? "" : this.state.data.imageURL,
       fileName: this.state.data.fileName || "0",
       count: this.state.data.count || 0
     };
-    database
-      .ref()
-      .child("orders")
-      .child(this.state.data.title)
+    firestore
+      .collection("orders")
+      .doc(`${this.state.data.title}`)
       .set(data);
+    // database
+    //   .ref()
+    //   .child("orders")
+    //   .child(this.state.data.title)
+    //   .set(data);
 
     this.props.history.push("/orders");
   };
@@ -207,8 +215,8 @@ class OrderForm extends Form {
           {this.renderInput("title", "ID", "", "1")}
           {this.renderInput("name", "Ապրանք")}
           {this.renderInput("numberInStock", "Ծավալ")}
+          {this.renderInput("unit", "Միավոր")}
           {this.renderInput("dailyRentalRate", "Վերջնաժամկետ", "date")}
-          {this.renderSelect("contact", "Կոնտակտ", this.state.contacts)}
           {this.renderInput("comment", "Մեկնաբանություն")}
           <div className="upload-btn-wrapper">
             <button className="upload-btn">Upload a file</button>

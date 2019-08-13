@@ -7,7 +7,7 @@
     box-shadow: 7px 7px 16px rgba(0,0,0, 0.15);
     border-radius: 11px;
     left: 15%;
-    top: 30%;
+    top: 10%;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
 }

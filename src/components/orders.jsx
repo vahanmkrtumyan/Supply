@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {storage, database } from "./firebase";
+import { storage, database, firestore } from "./firebase";
 import { Link } from "react-router-dom";
 import OrdersTable from "./ordersTable";
 import OrdersTableUser from "./ordersTableUser";
@@ -27,10 +27,15 @@ class Orders extends Component {
   };
 
   componentDidMount() {
-    database.ref("orders").on("value", snapshot => {
-      if (snapshot.val() !== null) {
-        const datas = Object.values(snapshot.val());
+    firestore.collection("orders").onSnapshot(snapshot => {
+      if (snapshot.docs !== null) {
+        const datas = snapshot.docs.map(doc => {
+          return { ...doc.data() };
+        });
         this.setState({ orders: datas, loading: false });
+      }
+      if (snapshot === null) {
+        this.setState({ loading: false });
       }
     });
   }
@@ -42,15 +47,14 @@ class Orders extends Component {
       .child(order.id)
       .remove();
 
-
-      var storageRef = storage.ref("images/" + order.fileName);
-      storageRef
+    var storageRef = storage.ref("images/" + order.fileName);
+    storageRef
       .delete()
       .then(function() {
         // File deleted successfully
       })
       .catch(function(error) {
-        // Uh-oh, an error occurred!
+        console.log(error);
       });
 
     // let image = order.fileName
@@ -91,10 +95,9 @@ class Orders extends Component {
     console.log(orderNew);
 
     this.setState({ order: orderNew }, () =>
-      database
-        .ref()
-        .child("orders")
-        .child(order.id)
+      firestore
+        .collection("orders")
+        .doc(`${order.id}`)
         .set(this.state.order)
     );
   };
@@ -104,19 +107,21 @@ class Orders extends Component {
   };
 
   getPagedData = () => {
-    const {
-      pageSize,
-      currentPage,
-      sortColumn,
-      searchQuery,
-      orders: allOrders
-    } = this.state;
+    let data2 = [...this.state.orders].map(item => {
+      let d = Number(item.id);
 
-    let filtered = allOrders.filter(m =>
-      m.name.toLowerCase().includes(searchQuery.toLowerCase())
+      item.id = d;
+
+      return item;
+    });
+
+    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
+
+    let filtered = data2.filter(m =>
+      m.name.includes(searchQuery.toLowerCase())
     );
 
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const sorted = _.orderBy(filtered, sortColumn.path, [sortColumn.order]);
 
     const orders = paginate(sorted, currentPage, pageSize);
 
@@ -138,14 +143,24 @@ class Orders extends Component {
           />
         </div>
       );
-    if (count === 0 && (!user || user.email !== "vahanmkrtumyan@gmail.com"))
+    if (
+      count === 0 &&
+      (!user ||
+        (user.email !== "vahanmkrtumyan@gmail.com" &&
+          user.email !== "tashir.provider@gmail.com"))
+    )
       return (
         <div>
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
         </div>
       );
 
-    if (count === 0 && user && user.email === "vahanmkrtumyan@gmail.com")
+    if (
+      count === 0 &&
+      user &&
+      (user.email === "vahanmkrtumyan@gmail.com" ||
+        user.email === "tashir.provider@gmail.com")
+    )
       return (
         <div className="box">
           <p>Տվյալ պահին հայտարարություններ չկան։</p>
@@ -160,7 +175,11 @@ class Orders extends Component {
       );
     const { totalCount, data: orders } = this.getPagedData();
 
-    if (user && user.email === "vahanmkrtumyan@gmail.com")
+    if (
+      user &&
+      (user.email === "vahanmkrtumyan@gmail.com" ||
+        user.email === "tashir.provider@gmail.com")
+    )
       return (
         <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
           <div className="col">
