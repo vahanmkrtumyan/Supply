@@ -59,11 +59,29 @@ class OrderForm extends Form {
   };
 
   componentDidMount() {
+    let sss = this.props.match.params.id;
+
+    if (sss < 10) {
+      sss = "000".concat(sss);
+    }
+
+    console.log(sss);
+
+    if (sss > 10 && sss < 100) {
+      sss = "00".concat(sss);
+    }
+
+    if (sss > 100 && sss < 1000) {
+      sss = "0".concat(sss);
+    }
+
+    console.log(sss);
+
     firestore
       .collection("orders")
-      .where("title", "==", `${this.props.match.params.id}`)
-      // .where(`id`,`==`,`${this.props.match.params.id}`)
-      .onSnapshot(snapshot => {
+      .where(`title`, `==`, `${sss}`)
+      .get()
+      .then(snapshot => {
         if (snapshot.docs !== null) {
           const datas = snapshot.docs.map(doc => {
             return { id: doc.id, ...doc.data() };
@@ -71,16 +89,45 @@ class OrderForm extends Form {
 
           this.setState({ orders: datas }, () => {
             console.log(datas);
-            const getOrder = id => {
-              return this.state.orders.filter(m => m.id == id);
-            };
-            const OrderId = this.props.match.params.id;
-            if (OrderId === "new") return;
-            const order = getOrder(OrderId);
-            console.log(order, OrderId);
 
-            if (!order) return this.props.history.replace("/not-found");
-            this.setState({ data: this.mapToViewModel(order[0]) }, () =>
+            let OrderId = this.props.match.params.id;
+
+            if (OrderId < 10) {
+              OrderId = "000".concat(OrderId);
+            }
+
+            console.log(OrderId);
+
+            if (OrderId > 10 && OrderId < 100) {
+              OrderId = "00".concat(OrderId);
+            }
+
+            if (OrderId > 100 && OrderId < 1000) {
+              OrderId = "0".concat(OrderId);
+            }
+
+            console.log(OrderId);
+            if (OrderId === "new") return;
+
+            // const order = this.state.orders
+            //   ? this.state.orders.filter(m => m.id === OrderId)
+            //   : {
+            //       id: 1,
+            //       title: 1,
+            //       name: 1,
+            //       numberInStock: 1,
+            //       unit: 1,
+            //       dailyRentalRate: 1,
+            //       comment: 1,
+            //       imageURL: "as",
+            //       fileName: "as",
+            //       count: 1
+            //     };
+
+            // console.log(order);
+
+            //    if (!order) return this.props.history.replace("/not-found");
+            this.setState({ data: this.state.orders[0] }, () =>
               console.log(this.state.data)
             );
           });
@@ -106,10 +153,10 @@ class OrderForm extends Form {
   handleSubmit = e => {
     e.preventDefault();
 
-    const errors = this.validate();
-    this.setState({ errors: errors || {} });
+    // const errors = this.validate();
+    // this.setState({ errors: errors || {} });
 
-    if (errors) return;
+    // if (errors) return;
 
     const data = {
       id: this.state.data.title,
@@ -124,10 +171,13 @@ class OrderForm extends Form {
       fileName: this.state.data.fileName || "0",
       count: this.state.data.count || 0
     };
+
+    let sss = this.state.data.title;
+
     firestore
       .collection("orders")
-      .doc(`${this.state.data.title}`)
-      .set(data);
+      .doc(`${sss}`)
+      .update(data);
     // database
     //   .ref()
     //   .child("orders")

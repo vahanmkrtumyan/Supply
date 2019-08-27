@@ -29,7 +29,7 @@ class OrdersTable extends Component {
       path: "unit",
       label: "Միավոր",
       content: order => (
-        <p onClick={() => this.props.onOpen(order)}>{order.numberInStock}</p>
+        <p onClick={() => this.props.onOpen(order)}>{order.unit}</p>
       )
     },
     {

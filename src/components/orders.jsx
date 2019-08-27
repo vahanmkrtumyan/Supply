@@ -41,11 +41,10 @@ class Orders extends Component {
   }
 
   handleDelete = order => {
-    database
-      .ref()
-      .child("orders")
-      .child(order.id)
-      .remove();
+    firestore
+      .collection("orders")
+      .doc(`${order.id}`)
+      .delete();
 
     var storageRef = storage.ref("images/" + order.fileName);
     storageRef
@@ -80,7 +79,9 @@ class Orders extends Component {
   };
 
   handleSearch = query => {
-    this.setState({ searchQuery: query, currentPage: 1 });
+    this.setState({ searchQuery: query, currentPage: 1 }, () =>
+      console.log(this.state.searchQuery)
+    );
   };
 
   handleSort = sortColumn => {
@@ -88,6 +89,24 @@ class Orders extends Component {
   };
 
   openModal = order => {
+    let sdd = { ...order };
+
+    let sss = sdd.id;
+
+    if (sss < 10) {
+      sss = "000".concat(sss);
+    }
+
+    console.log(sss);
+
+    if (sss > 10 && sss < 100) {
+      sss = "00".concat(sss);
+    }
+
+    if (sss > 100 && sss < 1000) {
+      sss = "0".concat(sss);
+    }
+
     this.setState({ order, show: true });
 
     let orderNew = { ...order };
@@ -97,8 +116,8 @@ class Orders extends Component {
     this.setState({ order: orderNew }, () =>
       firestore
         .collection("orders")
-        .doc(`${order.id}`)
-        .set(this.state.order)
+        .doc(`${sss}`)
+        .update(this.state.order)
     );
   };
 
@@ -118,12 +137,16 @@ class Orders extends Component {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
     let filtered = data2.filter(m =>
-      m.name.includes(searchQuery.toLowerCase())
+      m.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const sorted = _.orderBy(filtered, sortColumn.path, [sortColumn.order]);
+    // const sorted = _.orderBy(
+    //   filtered,
+    //   sortColumn.path,
+    //   this.state.sortColumn.order
+    // );
 
-    const orders = paginate(sorted, currentPage, pageSize);
+    const orders = paginate(filtered, currentPage, 8);
 
     return { totalCount: filtered.length, data: orders };
   };
@@ -147,7 +170,8 @@ class Orders extends Component {
       count === 0 &&
       (!user ||
         (user.email !== "vahanmkrtumyan@gmail.com" &&
-          user.email !== "tashir.provider@gmail.com"))
+          user.email !== "tashir.provider@gmail.com" &&
+          user.email !== "tashir.provider.23@gmail.com"))
     )
       return (
         <div>
@@ -159,7 +183,8 @@ class Orders extends Component {
       count === 0 &&
       user &&
       (user.email === "vahanmkrtumyan@gmail.com" ||
-        user.email === "tashir.provider@gmail.com")
+        user.email === "tashir.provider@gmail.com" ||
+        user.email === "tashir.provider.23@gmail.com")
     )
       return (
         <div className="box">
@@ -178,7 +203,8 @@ class Orders extends Component {
     if (
       user &&
       (user.email === "vahanmkrtumyan@gmail.com" ||
-        user.email === "tashir.provider@gmail.com")
+        user.email === "tashir.provider@gmail.com" ||
+        user.email === "tashir.provider.23@gmail.com")
     )
       return (
         <div className="row box" /*style={{backgroundColor: '#909da6'}}*/>
@@ -198,7 +224,8 @@ class Orders extends Component {
                 </Link>
               </div>
             </div>
-
+            <div>
+            </div>
             <OrdersTable
               orders={orders}
               sortColumn={sortColumn}
@@ -209,7 +236,7 @@ class Orders extends Component {
             />
             <Pagination
               itemsCount={totalCount}
-              pageSize={pageSize}
+              pageSize={8}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}
             />
@@ -244,7 +271,7 @@ class Orders extends Component {
           />
           <Pagination
             itemsCount={totalCount}
-            pageSize={pageSize}
+            pageSize={8}
             currentPage={currentPage}
             onPageChange={this.handlePageChange}
           />
